@@ -17,14 +17,13 @@ public class HomeController : Controller
     return View();
   }
 
-  public IActionResult Privacy()
+  public IActionResult Profile()
   {
     return View();
   }
 
-  [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-  public IActionResult Error()
+  public IActionResult Settings()
   {
-    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    return View();
   }
 }
