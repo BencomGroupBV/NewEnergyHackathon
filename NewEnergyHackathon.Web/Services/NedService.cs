@@ -1,12 +1,11 @@
-﻿using System.Security.Authentication;
+﻿using System.Text.Json;
+using NewEnergyHackathon.Web.Models.Enums;
 
 namespace NewEnergyHackathon.Web.Services;
 
-using System.Text.Json;
-
 public interface INedService
 {
-  Task<string> GetGridConsumptionByEnergyType(int typeId, DateOnly before, DateOnly after);
+  Task<string> GetGridConsumptionByEnergyType(EnergyType energyType, DateOnly dateTo, DateOnly dateFrom);
 }
 
 public class NedService : INedService
@@ -23,20 +22,20 @@ public class NedService : INedService
     _httpClient.DefaultRequestHeaders.Add("Accept", "application/ld+json");
   }
 
-  public async Task<string> GetGridConsumptionByEnergyType(int typeId, DateOnly before, DateOnly after)
+  public async Task<string> GetGridConsumptionByEnergyType(EnergyType energyType, DateOnly dateTo, DateOnly dateFrom)
   {
     var allResults = new List<JsonElement>();
 
     var queryParams = new Dictionary<string, string>
     {
     { "point", "0" },
-    { "type", typeId.ToString() },
+    { "type", ((int)energyType).ToString() },
     { "granularity", "4" },
     { "granularitytimezone", "1" },
     { "classification", "2" },
     { "activity", "1" },
-    { "validfrom[strictly_before]", before.ToString("yyyy-MM-dd") },
-    { "validfrom[after]", after.ToString("yyyy-MM-dd") }
+    { "validfrom[strictly_before]", dateTo.ToString("yyyy-MM-dd") },
+    { "validfrom[after]", dateFrom.ToString("yyyy-MM-dd") }
     };
 
     var requestUrl = $"{BaseUrl}?{await new FormUrlEncodedContent(queryParams).ReadAsStringAsync()}";
