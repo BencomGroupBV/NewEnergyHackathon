@@ -198,7 +198,7 @@ TODO: add buttons to change days
       }
 
     document.addEventListener("DOMContentLoaded", function () {
-      fetch('/green-energy-forecast?before=2025-03-23&after=2025-03-21')
+      fetch('https://new-energy-web-ca.delightfulwater-1c9907f8.westeurope.azurecontainerapps.io/daily-green-energy?dateTo=2025-03-23&dateFrom=2025-03-21')
         .then(res => res.json())
         .then(data => buildGraph(data));
     });

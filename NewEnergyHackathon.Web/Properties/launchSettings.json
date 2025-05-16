@@ -14,7 +14,7 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "PYTHONNET_PYDLL": "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python310\\python310.dll"
+        "PYTHONNET_PYDLL": "C:\\Users\\RonnyAtoche-BencomGr\\AppData\\Local\\Programs\\Python\\Python313\\python3.dll"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7208;http://localhost:5279"
