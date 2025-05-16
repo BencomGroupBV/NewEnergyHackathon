@@ -44,7 +44,7 @@
                         <canvas id="usageChart"></canvas>
                     </div>
                     <div class="mt-4 text-center">
-                        <h5>Score: <span id="score2">Model.Score2</span></h5>
+                        <h5>Score: <span id="score2">Model.Score2hoi</span></h5>
                         <p id="explanation2">Model.Explanation2</p>
                     </div>
                 </div>
@@ -101,73 +101,83 @@
 
     <script>
           function buildGraph(data) {
-            // Set new default font family and font color to mimic Bootstrap's default styling
-            Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-            Chart.defaults.global.defaultFontColor = '#858796';
+    Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+    Chart.defaults.global.defaultFontColor = '#858796';
 
-            // Bar Chart Example
-            var ctx = document.getElementById("forecastChart");
-            const stackedChart = new Chart(ctx, {
-              type: 'bar',
-              data: {
-                labels: data.map((input) => {
-                  const date = new Date(input.validfrom);
-                  return `${date.getHours()}:00`;
-                }),
-                datasets: [
-                  {
-                    label: 'Wind',
-                    data: data.map((input) => input.Wind_Percentage),
-                    backgroundColor: '#82b9ea',
-                    stack: 'combined' // same stack ID
-                  },
-                  {
-                    label: 'Solar',
-                    data: data.map((input) => input.Solar_Percentage),
-                    backgroundColor: '#f9c951',
-                    stack: 'combined' // same stack ID
-                  }
-                ]
-              },
-              options: {
-                responsive: true,
-                plugins: {
-                  tooltip: {
-                    mode: 'index',
-                    intersect: false
-                  },
-                  legend: {
-                    position: 'bottom'
-                  }
-                },
-                scales: {
-                  xAxes: [{
-                    stacked: true,               // stack bars on the x-axis
-                    scaleLabel: {
-                      display: true,         // ← enable the label
-                      labelString: 'Time of Day',
-                      fontSize: 14,
-                      fontStyle: 'bold'
-                    },
-                  }],
-                  yAxes: [{
-                    stacked: true,              // stack values on the y-axis
-                    scaleLabel: {
-                      display: true,         // ← enable the label
-                      labelString: 'Percentage',
-                      fontSize: 14,
-                      fontStyle: 'bold'
-                    },
-                    ticks: {
-                      beginAtZero: true,   // start at zero
-                      max: 100,            // force upper bound
-                      stepSize: 10,        // tick every 10 units
-                      endOnTick: true      // make sure the last tick is at max
-                    }
-                  }]
-                }
-              }
-            });
+    var ctx = document.getElementById("forecastChart");
+    const stackedChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: data.map((input) => {
+          console.log(input.validfrom);
+
+          const date = new Date(input.validfrom);
+
+          console.log(date);
+
+          console.log(date.getHours());
+          return `${String(date.getUTCHours()).padStart(2, '0')}:${String(date.getUTCMinutes()).padStart(2, '0')}`;
+        }),
+        datasets: [
+          {
+            label: 'Wind',
+            data: data.map((input) => input.Wind_Percentage),
+            backgroundColor: '#82b9ea',
+            stack: 'combined'
+          },
+          {
+            label: 'Solar',
+            data: data.map((input) => input.Solar_Percentage),
+            backgroundColor: '#f9c951',
+            stack: 'combined'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        tooltips: {
+          mode: 'index',
+          intersect: false,
+          callbacks: {
+            label: function(tooltipItem, data) {
+              const dataset = data.datasets[tooltipItem.datasetIndex];
+              const value = dataset.data[tooltipItem.index];
+              return `${dataset.label}: ${Math.round(value)}%`;
+            }
+          }
+        },
+        legend: {
+          position: 'bottom'
+        },
+        scales: {
+          xAxes: [{
+            stacked: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'Time of Day',
+              fontSize: 14,
+              fontStyle: 'bold'
+            }
+          }],
+          yAxes: [{
+            stacked: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'Percentage',
+              fontSize: 14,
+              fontStyle: 'bold'
+            },
+            ticks: {
+              beginAtZero: true,
+              max: 100,
+              stepSize: 10,
+              endOnTick: true
+            }
+          }]
+        }
+      }
+    });
+
           }
 
         document.addEventListener("DOMContentLoaded", function () {
