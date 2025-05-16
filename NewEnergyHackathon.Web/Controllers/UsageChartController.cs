@@ -19,8 +19,6 @@ public class UsageChartController(INedService nedService, IBenCompareService ben
     var wind = await nedService.GetGridConsumptionByEnergyType(EnergyType.Wind, dateTo, dateFrom);
     var totalmix = await nedService.GetGridConsumptionByEnergyType(EnergyType.ElectricityMix, dateTo, dateFrom);
 
-    PythonEngine.Initialize();
-
     using (Py.GIL())
     {
       dynamic sys = Py.Import("sys");
@@ -41,8 +39,6 @@ public class UsageChartController(INedService nedService, IBenCompareService ben
     var solar = await nedService.GetGridConsumptionByEnergyType(EnergyType.Solar, dateTo, dateFrom);
     var wind = await nedService.GetGridConsumptionByEnergyType(EnergyType.Wind, dateTo, dateFrom);
     var totalmix = await nedService.GetGridConsumptionByEnergyType(EnergyType.ElectricityMix, dateTo, dateFrom);
-
-    PythonEngine.Initialize();
 
     using (Py.GIL())
     {

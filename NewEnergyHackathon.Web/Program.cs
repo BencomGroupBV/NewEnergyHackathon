@@ -1,4 +1,5 @@
-using NewEnergyHackathon.Web.Services;
+﻿using NewEnergyHackathon.Web.Services;
+using Python.Runtime;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,9 +24,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
-//var input = new CalculationRequest();
-//var result = CalculationController.PythonCalculate(input).ConfigureAwait(true);
-//Console.WriteLine(result);
+PythonEngine.Initialize();
+PythonEngine.BeginAllowThreads();
 
 app.UseAuthorization();
 
