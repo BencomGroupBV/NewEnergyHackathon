@@ -1,10 +1,61 @@
 import pandas as pd
+import json
 
 def percentageNEDGreenEnergySingleDay(object_SolarInput_SingleDay, object_WindInput_SingleDay, object_TotalMixInput_SingleDay, dateValueStrFormat):
 
-    df_single_Solar = pd.DataFrame(object_SolarInput_SingleDay)
-    df_single_Wind = pd.DataFrame(object_WindInput_SingleDay)
-    df_single_totalmix = pd.DataFrame(object_TotalMixInput_SingleDay)
+    '''
+    Param (Str): dateValueStrFormat : Sample: '2025-03-22'
+    Param (JSON): object_SolarInput_SingleDay | object_WindInput_SingleDay | object_TotalMixInput_SingleDay : List of objects. Sample:
+        [
+    {
+        "@id": "/v1/utilizations/68639887481",
+        "@type": "Utilization",
+        "id": 68639887481,
+        "point": "/v1/points/0",
+        "type": "/v1/types/1",
+        "granularity": "/v1/granularities/4",
+        "granularitytimezone": "/v1/granularity_time_zones/0",
+        "activity": "/v1/activities/1",
+        "classification": "/v1/classifications/2",
+        "capacity": 431688,
+        "volume": 107922,
+        "percentage": 0.06511380523443222,
+        "emission": 0,
+        "emissionfactor": 0,
+        "validfrom": "2025-03-20T23:00:00+00:00",
+        "validto": "2025-03-20T23:15:00+00:00",
+        "lastupdate": "2025-03-22T23:52:25+00:00"
+    },
+    {
+        "@id": "/v1/utilizations/68639949251",
+        "@type": "Utilization",
+        "id": 68639949251,
+        "point": "/v1/points/0",
+        "type": "/v1/types/1",
+        "granularity": "/v1/granularities/4",
+        "granularitytimezone": "/v1/granularity_time_zones/0",
+        "activity": "/v1/activities/1",
+        "classification": "/v1/classifications/2",
+        "capacity": 458324,
+        "volume": 114581,
+        "percentage": 0.06913135200738907,
+        "emission": 0,
+        "emissionfactor": 0,
+        "validfrom": "2025-03-20T23:15:00+00:00",
+        "validto": "2025-03-20T23:30:00+00:00",
+        "lastupdate": "2025-03-22T23:52:25+00:00"
+    },
+    .
+    .
+    .]
+    '''
+    object_SolarInput_SingleDay_json = json.loads(object_SolarInput_SingleDay)
+    object_WindInput_SingleDay_json = json.loads(object_WindInput_SingleDay)
+    object_TotalMixInput_SingleDay_json = json.loads(object_TotalMixInput_SingleDay)
+
+    df_single_Solar = pd.DataFrame(object_SolarInput_SingleDay_json)
+    df_single_Wind = pd.DataFrame(object_WindInput_SingleDay_json)
+    df_single_totalmix = pd.DataFrame(object_TotalMixInput_SingleDay_json)
 
     df_single_Solar['validfrom'] = pd.to_datetime(df_single_Solar['validfrom'])
     df_single_Wind['validfrom'] = pd.to_datetime(df_single_Wind['validfrom'])
