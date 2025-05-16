@@ -10,6 +10,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddSingleton<INedService, NedService>();
 builder.Services.AddSingleton<ISmartMeterService, SmartMeterService>();
 builder.Services.AddSingleton<IBenCompareService, BenCompareService>();
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 
