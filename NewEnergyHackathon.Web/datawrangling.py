@@ -96,7 +96,12 @@ def percentageNEDGreenEnergySingleDay(object_SolarInput_SingleDay, object_WindIn
 
     df_Complete['TotalGreen_Percentage'] = (df_Complete['Solar_Percentage'] + df_Complete['Wind_Percentage'])
 
-    return df_Complete.to_json(orient='records')
+    Total_TotalMix_Production = df_Complete['volume_TotalMix'].sum()
+    Total_GreenEnergy_Production = (df_Complete['volume_Wind'].sum() + df_Complete['volume_Solar'].sum()) 
+
+    green_grid_total_score = (Total_GreenEnergy_Production/Total_TotalMix_Production)*100
+
+    return df_Complete.to_json(orient='records'), green_grid_total_score
 
 
 def greenBehaviourPercentagesSingleDaySingleNonSolarUser(object_meterreading_bencompare, object_SolarInput_SingleDay, object_WindInput_SingleDay, object_TotalMixInput_SingleDay, dateValueStrFormat):
