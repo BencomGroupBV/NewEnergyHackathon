@@ -1,0 +1,90 @@
+﻿@{
+  Layout = "_Layout"; 
+}
+<div class="container-fluid">
+  <div class="col-xl-8 col-lg-7">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Consumption Chart</h6>
+      </div>
+      <div class="card-body">
+        <div class="chart-area">
+          <canvas id="userConsumptionChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  fetch('/daily-green-consumption?dateTo=2025-03-23&dateFrom=2025-03-21')
+    .then(response => response.json())
+    .then(wrapper => {
+      const dataset = wrapper.data;
+
+      const labels = dataset.map(entry => entry.validFrom);
+      const greenData = dataset.map(entry => entry.consumptionDeliveryTotal_Green);
+      const nonGreenData = dataset.map(entry => entry.consumptionDeliveryTotal_NoGreen);
+
+      const ctx = document.getElementById('userConsumptionChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Green Consumption',
+              data: greenData,
+              backgroundColor: 'rgba(0, 255, 0, 0.5)',
+              borderColor: 'rgba(0, 255, 0, 0.5)',
+              borderWidth: 1
+            },
+            {
+              label: 'No Green Consumption',
+              data: nonGreenData,
+              backgroundColor: 'rgba(99, 102, 106, 0.5)',
+              borderColor: 'rgba(99, 102, 106, 0.5)',
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            x: {
+              stacked: true,
+              ticks: {
+                maxRotation: 90,
+                minRotation: 45,
+                autoSkip: true,
+                maxTicksLimit: 20
+              }
+            },
+            y: {
+              stacked: true,
+              beginAtZero: true,
+              ticks: {
+                callback: function (value) {
+                  return value + ' wh';
+                }
+              }
+            }
+          },
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  return `${context.dataset.label}: ${context.parsed.y.toFixed(2)} Wh`;
+                }
+              }
+            },
+            legend: {
+              position: 'top'
+            }
+          }
+        }
+      });
+    })
+    .catch(error => console.error('Error loading chart data:', error));
+</script>

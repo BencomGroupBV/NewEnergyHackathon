@@ -366,3 +366,4 @@ FodyWeavers.xsd
 .idea/
 package.json
 package-lock.json
+**/Properties/launchSettings.json

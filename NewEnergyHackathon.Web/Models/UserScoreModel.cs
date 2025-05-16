@@ -9,11 +9,11 @@ public class UserScoreWrapper
 
 public class UserScoreData
 {
-  public DateTime ValidFrom { get; set; }
+  public string ValidFrom { get; set; }
   public double Volume_Solar { get; set; }
   public double Volume_Wind { get; set; }
   public double Volume_TotalMix { get; set; }
-  public DateTime Items_Timestamp_UTC { get; set; }
+  public string Items_Timestamp_UTC { get; set; }
   public double ConsumptionDeliveryTotal { get; set; }
   public double Solar_Percentage { get; set; }
   public double Wind_Percentage { get; set; }

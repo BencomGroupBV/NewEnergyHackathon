@@ -13,91 +13,152 @@
       <div class="card-body">
         <div class="chart-area">
           <canvas id="smartMeterChart"></canvas>
+
+          <div class="row">
+            <div class="col">
+              <table class="table table-bordered table-striped">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Date</th>
+                    <th>Percentage</th>
+                    <th>Grid Mix</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Today</td>
+                    <td>60%</td>
+                    <td>55%</td>
+                  </tr>
+                  <tr>
+                    <td>Yesterday</td>
+                    <td>40%</td>
+                    <td>45%</td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div id="netmixFeedback" class="mt-3 p-3 bg-success text-white rounded shadow-sm">
+          </div>
         </div>
       </div>
-    </div>
-    </div>
 
+    </div>
   </div>
-  <script>
-    fetch('/smartmeterdata-no-solar-pannels')
-      .then(res => res.json())
-      .then(data => {
-        const labels = data.map(item => item.Items_Timestamp_UTC);
-        const values = data.map(item => item.Items_ConsumptionDeliveryTotal);
 
-        new Chart(document.getElementById('smartMeterChart'), {
-          type: 'line',
-          data: {
-            labels: labels,
-            datasets: [{
-              label: 'Smart Meter Consumption (kWh)',
-              data: values,
-              borderColor: 'rgba(54, 162, 235, 0.8)',
-              backgroundColor: 'rgba(54, 162, 235, 0.2)',
-              borderWidth: 2,
-              fill: true,
-              tension: 0.4,
-              pointRadius: 0
-            }]
+</div>
+
+<script>
+  // Feedback options for users outperforming the netmix
+  const outperformOptions = [
+    "💡 <strong>Je zit goed!</strong><br>Afgelopen week was gemiddeld 62% van de stroom op het net groen. Jouw verbruik bestond zelfs voor 74% uit duurzame energie. Door je apparaten op de juiste momenten te gebruiken, draag je al flink bij aan de energietransitie.<br>➡️ Bekijk wanneer de stroom vandaag en morgen het groenst is, en blijf slim plannen.",
+    "🌿 <strong>Mooi gedaan!</strong><br>Jij hebt 12% méér groene energie gebruikt dan het landelijke gemiddelde. Dat betekent minder CO₂-uitstoot en een slimme inzet van duurzame bronnen.<br>➡️ Wil je dit vasthouden? Check hier wanneer je het beste je apparaten kunt gebruiken.",
+    "✅ <strong>Je maakt echt verschil.</strong><br>Waar het landelijk gemiddelde op 58% lag, zat jij deze week op 70% groen verbruik. Door kleine aanpassingen in je routines draag je al bij aan een schoner net.<br>➡️ Tip: bekijk hier het verwachte groene energiemoment van vandaag en morgen om verder te optimaliseren."
+  ];
+
+  // Feedback options for users underperforming the netmix
+  const underperformOptions = [
+    "⚠️ <strong>Je zit er nét onder.</strong><br>Gemiddeld was 64% van de stroom op het net duurzaam, terwijl jouw verbruik op 52% groen lag. Een kleine verschuiving in timing maakt al verschil.<br>➡️ Ontdek hier wanneer vandaag en morgen de stroom het duurzaamst is en plan je verbruik slimmer.",
+    "🔧 <strong>Een goed moment om te verbeteren.</strong><br>Je hebt deze week 9% minder duurzame stroom verbruikt dan gemiddeld. Door bijvoorbeeld de wasmachine overdag te laten draaien of het opladen te verschuiven, kun je eenvoudig bijtrekken.<br>➡️ Bekijk hier de groene uren van vandaag en morgen voor slimme keuzes.",
+    "📉 <strong>Je laat kansen liggen.</strong><br>Landelijk lag het aandeel groene stroom op 60%. Jij zat daar met 44% flink onder. Grote kans dat je veel verbruikt op minder duurzame momenten.<br>➡️ Plan bewuster: check hier de voorspelde energiemix en kies het groenste moment voor vandaag en morgen."
+  ];
+
+  // Simulate user's green score compared to average (you can replace this with actual dynamic data)
+  const userOutperforms = true; // or false depending on logic
+
+  function displayNetmixFeedback() {
+    const feedbackArray = userOutperforms ? outperformOptions : underperformOptions;
+    const randomIndex = Math.floor(Math.random() * feedbackArray.length);
+    document.getElementById('netmixFeedback').innerHTML = feedbackArray[randomIndex];
+  }
+
+  // Show on page load
+  window.onload = displayNetmixFeedback;
+</script>
+
+
+
+<script>
+  fetch('/smartmeterdata-no-solar-pannels')
+    .then(res => res.json())
+    .then(data => {
+      const labels = data.map(item => item.Items_Timestamp_UTC);
+      const values = data.map(item => item.Items_ConsumptionDeliveryTotal);
+
+      new Chart(document.getElementById('smartMeterChart'), {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Smart Meter Consumption (kWh)',
+            data: values,
+            borderColor: 'rgba(54, 162, 235, 0.8)',
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.4,
+            pointRadius: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          layout: {
+            padding: 20
           },
-          options: {
-            responsive: true,
-            layout: {
-              padding: 20
-            },
-            scales: {
-              x: {
-                type: 'time',
-                time: {
-                  parser: 'YYYY-MM-DD HH:mm:ssZ',
-                  tooltipFormat: 'MMM D, HH:mm',
-                  unit: 'day',
-                  displayFormats: {
-                    day: 'MMM D'
-                  }
-                },
-                ticks: {
-                  autoSkip: true,
-                  maxTicksLimit: 7,
-                  font: {
-                    size: 10
-                  },
-                  maxRotation: 0,
-                  minRotation: 0
-                },
-                title: {
-                  display: true,
-                  text: 'Date'
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'YYYY-MM-DD HH:mm:ssZ',
+                tooltipFormat: 'MMM D, HH:mm',
+                unit: 'day',
+                displayFormats: {
+                  day: 'MMM D'
                 }
               },
-              y: {
-                beginAtZero: true,
-                title: {
-                  display: true,
-                  text: 'Consumption (kWh)'
-                }
+              ticks: {
+                autoSkip: true,
+                maxTicksLimit: 7,
+                font: {
+                  size: 10
+                },
+                maxRotation: 0,
+                minRotation: 0
+              },
+              title: {
+                display: true,
+                text: 'Date'
               }
             },
-            plugins: {
-              tooltip: {
-                mode: 'index',
-                intersect: false,
-                callbacks: {
-                  label: function(context) {
-                    return ` ${context.dataset.label}: ${context.raw} kWh`;
-                  }
-                }
-              },
-              legend: {
+            y: {
+              beginAtZero: true,
+              title: {
                 display: true,
-                position: 'top'
+                text: 'Consumption (kWh)'
               }
             }
+          },
+          plugins: {
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              callbacks: {
+                label: function(context) {
+                  return ` ${context.dataset.label}: ${context.raw} kWh`;
+                }
+              }
+            },
+            legend: {
+              display: true,
+              position: 'top'
+            }
           }
-        });
+        }
       });
+    });
 
 
 
-  </script>
+</script>

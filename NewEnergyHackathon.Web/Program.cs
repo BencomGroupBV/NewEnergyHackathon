@@ -1,4 +1,5 @@
-using NewEnergyHackathon.Web.Services;
+﻿using NewEnergyHackathon.Web.Services;
+using Python.Runtime;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddSingleton<INedService, NedService>();
 builder.Services.AddSingleton<ISmartMeterService, SmartMeterService>();
 builder.Services.AddSingleton<IBenCompareService, BenCompareService>();
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 
@@ -23,9 +25,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
-//var input = new CalculationRequest();
-//var result = CalculationController.PythonCalculate(input).ConfigureAwait(true);
-//Console.WriteLine(result);
+PythonEngine.Initialize();
+PythonEngine.BeginAllowThreads();
 
 app.UseAuthorization();
 
