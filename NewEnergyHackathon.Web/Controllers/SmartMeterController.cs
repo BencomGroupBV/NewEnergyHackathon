@@ -9,7 +9,8 @@ public class SmartMeterController(ISmartMeterService smartMeterService, IBenComp
   [HttpGet("smartmeterdata")]
   public IActionResult Index()
   {
-    var userData = smartMeterService.GetSmartMeterData();
+    var userData = smartMeterService
+      .GetSmartMeterData();
 
     return Ok(userData);
   }
@@ -17,7 +18,10 @@ public class SmartMeterController(ISmartMeterService smartMeterService, IBenComp
   [HttpGet("smartmeterdata-no-solar-pannels")]
   public IActionResult BencompareUsage()
   {
-    var userData = benCompareService.GetBencompareData();
+    var date = "2025-03-22";
+
+    var userData = benCompareService
+      .GetBencompareData(date);
 
     return Ok(userData);
   }
