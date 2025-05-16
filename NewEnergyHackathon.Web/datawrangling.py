@@ -1,4 +1,5 @@
 import pandas as pd
+import json
 
 def percentageNEDGreenEnergySingleDay(object_SolarInput_SingleDay, object_WindInput_SingleDay, object_TotalMixInput_SingleDay, dateValueStrFormat):
 
@@ -48,10 +49,13 @@ def percentageNEDGreenEnergySingleDay(object_SolarInput_SingleDay, object_WindIn
     .
     .]
     '''
+    object_SolarInput_SingleDay_json = json.loads(object_SolarInput_SingleDay)
+    object_WindInput_SingleDay_json = json.loads(object_WindInput_SingleDay)
+    object_TotalMixInput_SingleDay_json = json.loads(object_TotalMixInput_SingleDay)
 
-    df_single_Solar = pd.DataFrame(object_SolarInput_SingleDay)
-    df_single_Wind = pd.DataFrame(object_WindInput_SingleDay)
-    df_single_totalmix = pd.DataFrame(object_TotalMixInput_SingleDay)
+    df_single_Solar = pd.DataFrame(object_SolarInput_SingleDay_json)
+    df_single_Wind = pd.DataFrame(object_WindInput_SingleDay_json)
+    df_single_totalmix = pd.DataFrame(object_TotalMixInput_SingleDay_json)
 
     df_single_Solar['validfrom'] = pd.to_datetime(df_single_Solar['validfrom'])
     df_single_Wind['validfrom'] = pd.to_datetime(df_single_Wind['validfrom'])
