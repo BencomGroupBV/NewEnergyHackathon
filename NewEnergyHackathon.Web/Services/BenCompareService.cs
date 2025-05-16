@@ -1,17 +1,25 @@
-﻿namespace NewEnergyHackathon.Web.Services;
+﻿using System.Text.Json;
+using NewEnergyHackathon.Web.Models;
+
+namespace NewEnergyHackathon.Web.Services;
 
 public interface IBenCompareService
 {
-  string GetBencompareData();
+  string GetBencompareData(string date);
 }
 
 public class BenCompareService : IBenCompareService
 {
-  public string GetBencompareData()
+  public string GetBencompareData(string date)
   {
     var dataFilePath = Path.Combine(AppContext.BaseDirectory, "user-smartmeter-data-no-solar-pannels.json");
     var bencompareUsageData = File.ReadAllText(dataFilePath);
+    var bencompareModel = JsonSerializer.Deserialize<List<BencompareUsage>>(bencompareUsageData);
 
-    return bencompareUsageData;
+    var filtered = bencompareModel
+      .Where(x => x.ItemsTimestampUTCDate == date)
+      .ToList();
+
+    return JsonSerializer.Serialize(filtered);
   }
 }
