@@ -22,7 +22,12 @@ public class HomeController : Controller
     return View();
   }
 
-  public IActionResult Profile()
+  public IActionResult History()
+  {
+    return View();
+  }
+  
+  public IActionResult GreenEnergyForecast()
   {
     return View();
   }

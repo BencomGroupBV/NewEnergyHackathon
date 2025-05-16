@@ -1,4 +1,6 @@
-﻿namespace NewEnergyHackathon.Web.Services;
+﻿using System.Security.Authentication;
+
+namespace NewEnergyHackathon.Web.Services;
 
 using System.Text.Json;
 
@@ -50,8 +52,9 @@ public class NedService : INedService
 
       if (root.TryGetProperty("hydra:member", out var members))
       {
-        foreach (var item in members.EnumerateArray())
-          allResults.Add(JsonDocument.Parse(item.GetRawText()).RootElement.Clone()); // fixes disposed object. JsonDocument, maybe todo nicer
+        allResults.AddRange(members.EnumerateArray()
+          .Select(item => JsonDocument
+            .Parse(item.GetRawText()).RootElement.Clone()));
       }
 
       if (root.TryGetProperty("hydra:view", out var view) &&
@@ -70,5 +73,4 @@ public class NedService : INedService
 
     return jsonOutput;
   }
-
 }

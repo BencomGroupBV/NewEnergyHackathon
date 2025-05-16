@@ -1,0 +1,154 @@
+﻿@{
+  ViewBag.Title = "Dashboard";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+  <div class="row mb-4">
+    <!-- Graph 1 -->
+    <div class="col">
+      <div class="card shadow h-100">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Green Energy Forecast</h6>
+        </div>
+        <div class="card-body">
+          <div class="chart-area">
+            <canvas id="forecastChart"></canvas>
+          </div>
+          <div class="mt-4 text-center">
+            <h5>Score: <span id="score1">Model.Score1</span></h5>
+            <p id="explanation1">Model.Explanation1</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <!-- Graph 2 -->
+    <div class="col">
+      <div class="card shadow h-100">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-success">Usage</h6>
+        </div>
+        <div class="card-body">
+          <div class="chart-pie pt-4 pb-2">
+            <canvas id="usageChart"></canvas>
+          </div>
+          <div class="mt-4 text-center">
+            <h5>Score: <span id="score2">Model.Score2</span></h5>
+            <p id="explanation2">Model.Explanation2</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+TODO: add buttons to change days
+
+
+@section Scripts {
+  <script>
+    function buildGraph(data) {
+      // Set new default font family and font color to mimic Bootstrap's default styling
+      Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+      Chart.defaults.global.defaultFontColor = '#858796';
+
+      // Bar Chart Example
+      var ctx = document.getElementById("forecastChart");
+      const stackedChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: // data.map((input) => input.timestamp) 
+            [
+              '0:00', '0:15', '0:30', '0:45',
+              '1:00', '1:15', '1:30', '1:45',
+              '2:00', '2:15', '2:30', '2:45',
+              '3:00', '3:15', '3:30', '3:45',
+              '4:00', '4:15', '4:30', '4:45',
+              '5:00', '5:15', '5:30', '5:45',
+              '6:00', '6:15', '6:30', '6:45',
+              '7:00', '7:15', '7:30', '7:45',
+              '8:00', '8:15', '8:30', '8:45',
+              '9:00', '9:15', '9:30', '9:45',
+              '10:00', '10:15', '10:30', '10:45',
+              '11:00', '11:15', '11:30', '11:45',
+              '12:00', '12:15', '12:30', '12:45',
+              '13:00', '13:15', '13:30', '13:45',
+              '14:00', '14:15', '14:30', '14:45',
+              '15:00', '15:15', '15:30', '15:45',
+              '16:00', '16:15', '16:30', '16:45',
+              '17:00', '17:15', '17:30', '17:45',
+              '18:00', '18:15', '18:30', '18:45',
+              '19:00', '19:15', '19:30', '19:45',
+              '20:00', '20:15', '20:30', '20:45',
+              '21:00', '21:15', '21:30', '21:45',
+              '22:00', '22:15', '22:30', '22:45',
+              '23:00', '23:15', '23:30', '23:45'
+            ],
+          datasets: [
+            {
+              label: 'Wind',
+              // data: input.map((input) => input.Wind / input.Total * 100),
+              data: [40, 7, 1, 47, 17, 15, 14, 8, 47, 6, 43, 47, 34, 5, 37, 27, 2, 1, 5, 13, 14, 32, 38, 1, 40, 7, 1, 47, 17, 15, 14, 8, 47, 6, 43, 47, 34, 5, 37, 27, 2, 1, 5, 13, 14, 32, 38, 1, 40, 7, 1, 47, 17, 15, 14, 8, 47, 6, 43, 47, 34, 5, 37, 27, 2, 1, 5, 13, 14, 32, 38, 1, 40, 7, 1, 47, 17, 15, 14, 8, 47, 6, 43, 47, 34, 5, 37, 27, 2, 1, 5, 13, 14, 32, 38, 1],
+              backgroundColor: '#82b9ea',
+              stack: 'combined' // same stack ID
+            },
+            {
+              label: 'Solar',
+              // data: input.map((input) => input.Solar / input.Total * 100),
+              data: [35, 12, 45, 41, 44, 34, 26, 14, 28, 37, 17, 0, 48, 10, 44, 27, 21, 17, 9, 13, 48, 21, 6, 5, 35, 12, 45, 41, 44, 34, 26, 14, 28, 37, 17, 0, 48, 10, 44, 27, 21, 17, 9, 13, 48, 21, 6, 5, 35, 12, 45, 41, 44, 34, 26, 14, 28, 37, 17, 0, 48, 10, 44, 27, 21, 17, 9, 13, 48, 21, 6, 5, 35, 12, 45, 41, 44, 34, 26, 14, 28, 37, 17, 0, 48, 10, 44, 27, 21, 17, 9, 13, 48, 21, 6, 5],
+              backgroundColor: '#f9c951',
+              stack: 'combined' // same stack ID
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            tooltip: {
+              mode: 'index',
+              intersect: false
+            },
+            legend: {
+              position: 'bottom'
+            }
+          },
+          scales: {
+            xAxes: [{
+              stacked: true,               // stack bars on the x-axis
+              scaleLabel: {
+                display: true,         // ← enable the label
+                labelString: 'Time of Day',
+                fontSize: 14,
+                fontStyle: 'bold'
+              },
+            }],
+            yAxes: [{
+              stacked: true,              // stack values on the y-axis
+              scaleLabel: {
+                display: true,         // ← enable the label
+                labelString: 'Percentage',
+                fontSize: 14,
+                fontStyle: 'bold'
+              },
+              ticks: {
+                beginAtZero: true,   // start at zero
+                max: 100,            // force upper bound
+                stepSize: 10,        // tick every 10 units
+                endOnTick: true      // make sure the last tick is at max
+              }
+            }]
+          }
+        }
+      });
+    }
+    
+  document.addEventListener("DOMContentLoaded", function () {
+    fetch('/green-energy-forecast?before=2025-03-23&after=2025-03-21')
+      .then(res => res.json())
+      .then(data => buildGraph(data));
+  });
+</script>
+}

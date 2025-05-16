@@ -8,6 +8,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<INedService, NedService>();
 builder.Services.AddSingleton<ISmartMeterService, SmartMeterService>();
+builder.Services.AddSingleton<IBenCompareService, BenCompareService>();
 
 var app = builder.Build();
 
