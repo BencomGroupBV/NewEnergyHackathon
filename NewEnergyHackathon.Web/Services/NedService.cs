@@ -1,4 +1,6 @@
-﻿namespace NewEnergyHackathon.Web.Services;
+﻿using System.Security.Authentication;
+
+namespace NewEnergyHackathon.Web.Services;
 
 using System.Text.Json;
 
@@ -14,7 +16,14 @@ public class NedService : INedService
 
   public NedService(HttpClient httpClient)
   {
-    _httpClient = httpClient;
+    HttpClientHandler handler = new HttpClientHandler
+    {
+      ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator,
+      SslProtocols = SslProtocols.Tls12 // or SslProtocols.Tls13 if supported
+    };
+    HttpClient client = new HttpClient(handler);
+
+    _httpClient = client;
     _httpClient.DefaultRequestHeaders.Clear();
     _httpClient.DefaultRequestHeaders.Add("X-AUTH-TOKEN",
       "a1997970697c96b6513b010c15e586c769eb33d5281064c5bffb5c9c24d48464");
