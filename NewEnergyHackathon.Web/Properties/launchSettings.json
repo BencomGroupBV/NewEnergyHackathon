@@ -13,7 +13,8 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "PYTHONNET_PYDLL": "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python310\\python310.dll"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7208;http://localhost:5279"

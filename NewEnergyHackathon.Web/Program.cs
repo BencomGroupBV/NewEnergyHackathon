@@ -1,7 +1,13 @@
+using NewEnergyHackathon.Web.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpClient();
+builder.Services.AddSingleton<INedService, NedService>();
+builder.Services.AddSingleton<ISmartMeterService, SmartMeterService>();
 
 var app = builder.Build();
 
@@ -16,14 +22,18 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+//var input = new CalculationRequest();
+//var result = CalculationController.PythonCalculate(input).ConfigureAwait(true);
+//Console.WriteLine(result);
+
 app.UseAuthorization();
 
-app.MapStaticAssets();
+app.UseStaticFiles();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+    //.WithStaticAssets(); //Not working in .NET 8
 
 
 app.Run();

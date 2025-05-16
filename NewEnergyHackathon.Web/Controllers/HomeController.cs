@@ -17,6 +17,11 @@ public class HomeController : Controller
     return View();
   }
 
+  public IActionResult SmartMeterDataUsage()
+  {
+    return View();
+  }
+
   public IActionResult Profile()
   {
     return View();

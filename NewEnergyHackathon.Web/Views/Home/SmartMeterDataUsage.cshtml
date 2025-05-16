@@ -1,0 +1,56 @@
+﻿@{
+  ViewData["Title"] = "Smart Meter Data";
+  Layout = "_Layout";
+}
+
+
+<div class="container-fluid">
+
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Smart Meter Data</h1>
+  </div>
+
+  <div class="row">
+    <canvas id="smartMeterChart" width="800" height="400"></canvas>
+  </div>
+
+</div>
+<script>
+  fetch('/smartmeterdata')
+    .then(res => res.json())
+    .then(data => {
+      const firstReading = data[0];
+      const labels = Object.keys(firstReading.timeSeries);
+      const values = Object.values(firstReading.timeSeries);
+
+      new Chart(document.getElementById('smartMeterChart'), {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: `${firstReading.entityId} (${firstReading.unit})`,
+            data: values,
+            borderWidth: 2,
+            fill: false,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
+                tooltipFormat: 'll HH:mm',
+                unit: 'hour'
+              }
+            },
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    });
+</script>

@@ -1,15 +1,29 @@
 # See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER $APP_UID
+
+# Install Python 3.11 and dependencies
+RUN apt-get update && apt-get install -y \
+    python3.11 python3.11-venv python3-pip libpython3.11 \
+    && python3.11 -m venv /opt/venv \
+    && /opt/venv/bin/pip install --upgrade pip \
+    && /opt/venv/bin/pip install pandas
+
+# Set environment variables for Python.NET
+ENV PATH="/opt/venv/bin:$PATH"
+ENV PYTHONNET_PYDLL=/usr/lib/x86_64-linux-gnu/libpython3.11.so
+ENV PYTHONHOME=/usr
+#ENV DOTNET_EnableDiagnostics=0
+
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
 
 # This stage is used to build the service project
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["NewEnergyHackathon.Web.csproj", "."]
