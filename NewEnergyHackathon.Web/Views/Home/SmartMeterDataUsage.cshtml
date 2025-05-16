@@ -5,52 +5,99 @@
 
 
 <div class="container-fluid">
+  <div class="col-xl-8 col-lg-7">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
+      </div>
+      <div class="card-body">
+        <div class="chart-area">
+          <canvas id="smartMeterChart"></canvas>
+        </div>
+      </div>
+    </div>
+    </div>
 
-  <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Smart Meter Data</h1>
   </div>
+  <script>
+    fetch('/smartmeterdata-no-solar-pannels')
+      .then(res => res.json())
+      .then(data => {
+        const labels = data.map(item => item.Items_Timestamp_UTC);
+        const values = data.map(item => item.Items_ConsumptionDeliveryTotal);
 
-  <div class="row">
-    <canvas id="smartMeterChart" width="800" height="400"></canvas>
-  </div>
-
-</div>
-<script>
-  fetch('/smartmeterdata')
-    .then(res => res.json())
-    .then(data => {
-      const firstReading = data[0];
-      const labels = Object.keys(firstReading.timeSeries);
-      const values = Object.values(firstReading.timeSeries);
-
-      new Chart(document.getElementById('smartMeterChart'), {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: `${firstReading.entityId} (${firstReading.unit})`,
-            data: values,
-            borderWidth: 2,
-            fill: false,
-            tension: 0.1
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            x: {
-              type: 'time',
-              time: {
-                parser: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
-                tooltipFormat: 'll HH:mm',
-                unit: 'hour'
+        new Chart(document.getElementById('smartMeterChart'), {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Smart Meter Consumption (kWh)',
+              data: values,
+              borderColor: 'rgba(54, 162, 235, 0.8)',
+              backgroundColor: 'rgba(54, 162, 235, 0.2)',
+              borderWidth: 2,
+              fill: true,
+              tension: 0.4,
+              pointRadius: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            layout: {
+              padding: 20
+            },
+            scales: {
+              x: {
+                type: 'time',
+                time: {
+                  parser: 'YYYY-MM-DD HH:mm:ssZ',
+                  tooltipFormat: 'MMM D, HH:mm',
+                  unit: 'day',
+                  displayFormats: {
+                    day: 'MMM D'
+                  }
+                },
+                ticks: {
+                  autoSkip: true,
+                  maxTicksLimit: 7,
+                  font: {
+                    size: 10
+                  },
+                  maxRotation: 0,
+                  minRotation: 0
+                },
+                title: {
+                  display: true,
+                  text: 'Date'
+                }
+              },
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: 'Consumption (kWh)'
+                }
               }
             },
-            y: {
-              beginAtZero: true
+            plugins: {
+              tooltip: {
+                mode: 'index',
+                intersect: false,
+                callbacks: {
+                  label: function(context) {
+                    return ` ${context.dataset.label}: ${context.raw} kWh`;
+                  }
+                }
+              },
+              legend: {
+                display: true,
+                position: 'top'
+              }
             }
           }
-        }
+        });
       });
-    });
-</script>
+
+
+
+  </script>
