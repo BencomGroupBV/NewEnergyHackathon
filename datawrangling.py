@@ -31,7 +31,7 @@ def percentageNEDGreenEnergySingleDay(object_SolarInput_SingleDay, object_WindIn
     df_Complete['Wind_Percentage'] = (df_Complete['volume_Wind']/df_Complete['volume_TotalMix'])*100
 
     df_Complete['TotalGreen_Percentage'] = (df_Complete['Solar_Percentage'] + df_Complete['Wind_Percentage'])
-
+    # return
     return df_Complete.to_json(orient='records')
 
 # def greenBehaviourScoreSingleDaySingleNonSolarUser(df_BencompareConsumptionDeliveryMarchComplete, json_GreenPercentageGridSingleDay, singleDateValue):
