@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NewEnergyHackathon.Web.Services;
+using Python.Runtime;
 
 namespace NewEnergyHackathon.Web.Controllers;
 
@@ -7,28 +8,32 @@ namespace NewEnergyHackathon.Web.Controllers;
 public class NedContoller(INedService nedService) : Controller
 {
   [HttpGet("results")]
-  public async Task<IActionResult> GetResults([FromQuery] List<int> typeIds, DateOnly before, DateOnly after)
+  public async Task<IActionResult> GetResults([FromQuery] int typeId, DateOnly before, DateOnly after)
   {
-    typeIds = new List<int>
+    var solar = await nedService.GetResultsAsync(2, before, after);
+    var wind = await nedService.GetResultsAsync(1, before, after);
+    var totalmix = await nedService.GetResultsAsync(27, before, after);
+
+    PythonEngine.Initialize();
+
+    using (Py.GIL())
     {
-      1,  // Wind
-      2,  // Solar
-      17, // WindOffShore
-      18, // FossilGasPower
-      19, // FossilHardCoal
-      20, // Nuclear
-      21, // WastePower
-      22, // WindOffshoreB
-      25, // BiomassPower
-      26, // OtherPower
-      27, // ElectricityMix
-      35, // CHPTotal
-      51, // WindOffshoreC
-      59  // ElectricityLoad
-    };
+      dynamic sys = Py.Import("sys");
+      sys.path.append(".");
 
-    var results = await nedService.GetResultsAsync(typeIds, before, after);
+      dynamic calc = Py.Import("datawrangling");
 
-    return Ok(results);
+      try
+      {
+        string resultJson = calc.percentageNEDGreenEnergySingleDay(solar, wind, totalmix, "2025-05-16").ToString();
+      }
+      catch (Exception e)
+      {
+        Console.WriteLine(e);
+        throw;
+      }
+      
+      return Ok();
+    }
   }
 }

@@ -1,44 +1,56 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 using Python.Runtime;
-using System.Text.Json;
 
 namespace NewEnergyHackathon.Web.Controllers
 {
   public class PythonController : Controller
   {
-	public static CalculationRequest Example => new()
-	{
-	  DailyInputOfType = [4, 9, 16],
-	  TotalMix = [5, 10, 16]
-	};
+    public static CalculationRequest Example => new()
+    {
+      DailyInputOfType = [4, 9, 16],
+      TotalMix = [5, 10, 16]
+    };
 
-	public class CalculationRequest
-	{
-	  public List<int> DailyInputOfType { get; set; }
 
-	  public string DailyInputType { get; set; }
+    [HttpGet("calculate-green")]
+    public IActionResult GetGreenEnergyMix()
+    {
+      var request = new CalculationRequest
+      {
+        DailyInputOfType = [4, 9, 16],
+        TotalMix = [5, 10, 16]
+      };
 
-	  public List<int> TotalMix { get; set; }
-	}
+      var input = JsonSerializer.Serialize(request);
 
-	// async calculate task
-	public static async Task Calculator(CalculationRequest input)
-	{
-	  var jsonInput = JsonSerializer.Serialize(input);
+      PythonEngine.Initialize();
 
-	  PythonEngine.Initialize();
-	  using (Py.GIL())
-	  {
-		dynamic sys = Py.Import("sys");
-		sys.path.append(".");
+      using (Py.GIL())
+      {
+        dynamic sys = Py.Import("sys");
+        sys.path.append(".");
 
-		dynamic calc = Py.Import("datawrangling");
-		string resultJson = calc.calculate(jsonInput).ToString();
+        dynamic calc = Py.Import("datawrangling");
 
-		var result = JsonSerializer.Deserialize<Dictionary<string, object>>(resultJson);
 
-		Console.WriteLine(JsonSerializer.Serialize(result, new JsonSerializerOptions { WriteIndented = true }));
-	  }
-	}
+        string resultJson = calc.percentageNEDGreenEnergySingleDay(input).ToString();
+
+        var result = JsonSerializer.Deserialize<Dictionary<string, object>>(resultJson);
+
+        return Ok(JsonSerializer.Serialize(result));
+      }
+    }
+
+
+    public class CalculationRequest
+    {
+      public List<int> DailyInputOfType { get; set; }
+
+      public string DailyInputType { get; set; }
+
+      public List<int> TotalMix { get; set; }
+    }
+
+    }
   }
-}
