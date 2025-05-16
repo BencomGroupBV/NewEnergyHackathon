@@ -3,8 +3,8 @@ import pandas as pd
 def percentageNEDGreenEnergySingleDay(object_SolarInput_SingleDay, object_WindInput_SingleDay, object_TotalMixInput_SingleDay, dateValueStrFormat):
 
     '''
-    Param: dateValueStrFormat : Sample: '2025-03-22'
-    Param: object_SolarInput_SingleDay | object_WindInput_SingleDay | object_TotalMixInput_SingleDay : List of objects. Sample:
+    Param (Str): dateValueStrFormat : Sample: '2025-03-22'
+    Param (JSON): object_SolarInput_SingleDay | object_WindInput_SingleDay | object_TotalMixInput_SingleDay : List of objects. Sample:
         [
     {
         "@id": "/v1/utilizations/68639887481",
