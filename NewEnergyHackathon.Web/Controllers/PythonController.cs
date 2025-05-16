@@ -1,17 +1,28 @@
-﻿using Python.Runtime;
+﻿using Microsoft.AspNetCore.Mvc;
+using Python.Runtime;
 using System.Text.Json;
 
 namespace NewEnergyHackathon.Web.Controllers
 {
-  public class CalculationController
+  public class PythonController : Controller
   {
+	public static CalculationRequest Example => new()
+	{
+	  DailyInputOfType = [4, 9, 16],
+	  TotalMix = [5, 10, 16]
+	};
+
 	public class CalculationRequest
 	{
-	  public List<int> Values { get; set; } = [4, 9, 16];
+	  public List<int> DailyInputOfType { get; set; }
+
+	  public string DailyInputType { get; set; }
+
+	  public List<int> TotalMix { get; set; }
 	}
 
 	// async calculate task
-	public static async Task PythonCalculate(CalculationRequest input)
+	public static async Task Calculator(CalculationRequest input)
 	{
 	  var jsonInput = JsonSerializer.Serialize(input);
 

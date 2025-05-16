@@ -23,7 +23,7 @@ public class NedService : INedService
 
   public async Task<string> GetResultsAsync(List<int> typeIds)
   {
-    var allResults = new List<JsonElement>(); // Collects results across all typeIds
+    var allResults = new List<JsonElement>();
 
     foreach (var typeId in typeIds)
     {
@@ -35,8 +35,8 @@ public class NedService : INedService
         { "granularitytimezone", "1" },
         { "classification", "2" },
         { "activity", "1" },
-        { "validfrom[strictly_before]", "2025-04-01" },
-        { "validfrom[after]", "2025-02-28" }
+        { "validfrom[strictly_before]", "2025-05-15" }, // todo make input param for the dates
+        { "validfrom[after]", "2025-05-14" } // same
       };
 
       var requestUrl = $"{BaseUrl}?{await new FormUrlEncodedContent(queryParams).ReadAsStringAsync()}";
@@ -53,10 +53,10 @@ public class NedService : INedService
         if (root.TryGetProperty("hydra:member", out var members))
         {
           foreach (var item in members.EnumerateArray())
-            allResults.Add(item);
-        }
+			allResults.Add(JsonDocument.Parse(item.GetRawText()).RootElement.Clone()); // fixes disposed object. JsonDocument, maybe todo nicer
+		}
 
-        if (root.TryGetProperty("hydra:view", out var view) &&
+		if (root.TryGetProperty("hydra:view", out var view) &&
             view.TryGetProperty("hydra:next", out var nextPage))
         {
           requestUrl = "https://api.ned.nl" + nextPage.GetString();
