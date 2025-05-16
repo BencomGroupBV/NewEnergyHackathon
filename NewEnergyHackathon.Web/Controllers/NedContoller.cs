@@ -7,7 +7,7 @@ namespace NewEnergyHackathon.Web.Controllers;
 public class NedContoller(INedService nedService) : Controller
 {
   [HttpGet("results")]
-  public async Task<IActionResult> GetResults([FromQuery] List<int> typeIds)
+  public async Task<IActionResult> GetResults([FromQuery] List<int> typeIds, DateOnly before, DateOnly after)
   {
     typeIds = new List<int>
     {
@@ -27,7 +27,7 @@ public class NedContoller(INedService nedService) : Controller
       59  // ElectricityLoad
     };
 
-    var results = await nedService.GetResultsAsync(typeIds);
+    var results = await nedService.GetResultsAsync(typeIds, before, after);
 
     return Ok(results);
   }
