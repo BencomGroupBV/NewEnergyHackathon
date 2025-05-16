@@ -16,14 +16,18 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+//var input = new CalculationRequest();
+//var result = CalculationController.PythonCalculate(input).ConfigureAwait(true);
+//Console.WriteLine(result);
+
 app.UseAuthorization();
 
-app.MapStaticAssets();
+app.UseStaticFiles();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+    //.WithStaticAssets(); //Not working in .NET 8
 
 
 app.Run();
