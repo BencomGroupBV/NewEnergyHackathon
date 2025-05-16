@@ -33,5 +33,4 @@ public class SmartMeterService : ISmartMeterService
 
     return readings;
   }
-
 }
