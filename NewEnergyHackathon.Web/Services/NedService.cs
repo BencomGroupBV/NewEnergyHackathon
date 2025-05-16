@@ -6,7 +6,7 @@ using System.Text.Json;
 
 public interface INedService
 {
-  Task<string> GetResultsAsync(int typeId, DateOnly before, DateOnly after);
+  Task<string> GetGridConsumptionByEnergyType(int typeId, DateOnly before, DateOnly after);
 }
 
 public class NedService : INedService
@@ -23,7 +23,7 @@ public class NedService : INedService
     _httpClient.DefaultRequestHeaders.Add("Accept", "application/ld+json");
   }
 
-  public async Task<string> GetResultsAsync(int typeId, DateOnly before, DateOnly after)
+  public async Task<string> GetGridConsumptionByEnergyType(int typeId, DateOnly before, DateOnly after)
   {
     var allResults = new List<JsonElement>();
 
