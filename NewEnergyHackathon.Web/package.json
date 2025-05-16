@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "gulp": "^5.0.0",
+    "startbootstrap-sb-admin-2": "^4.1.4"
+  }
+}

@@ -26,6 +26,11 @@ public class HomeController : Controller
   {
     return View();
   }
+  
+  public IActionResult GreenEnergyForecast()
+  {
+    return View();
+  }
 
   public IActionResult Settings()
   {
