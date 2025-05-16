@@ -16,14 +16,7 @@ public class NedService : INedService
 
   public NedService(HttpClient httpClient)
   {
-    HttpClientHandler handler = new HttpClientHandler
-    {
-      ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator,
-      SslProtocols = SslProtocols.Tls12 // or SslProtocols.Tls13 if supported
-    };
-    HttpClient client = new HttpClient(handler);
-
-    _httpClient = client;
+    _httpClient = httpClient;
     _httpClient.DefaultRequestHeaders.Clear();
     _httpClient.DefaultRequestHeaders.Add("X-AUTH-TOKEN",
       "a1997970697c96b6513b010c15e586c769eb33d5281064c5bffb5c9c24d48464");
