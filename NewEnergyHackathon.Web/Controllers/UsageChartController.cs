@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
+using NewEnergyHackathon.Web.Models;
 using NewEnergyHackathon.Web.Models.Enums;
 using NewEnergyHackathon.Web.Services;
 using Python.Runtime;
@@ -28,7 +30,7 @@ public class UsageChartController(INedService nedService, IBenCompareService ben
 
       var dailyGreenEnergyGrid = pythonCalculationFile
         .percentageNEDGreenEnergySingleDay(solar, wind, totalmix, DateOfEnergyConsumption).ToString();
-      
+
       return Ok(dailyGreenEnergyGrid);
     }
   }
@@ -51,10 +53,29 @@ public class UsageChartController(INedService nedService, IBenCompareService ben
 
       var bencompareData = benCompareService.GetBencompareData(DateOfEnergyConsumption);
 
-      var dailyGreenPercentageScores = pythonCalculationFile
-        .greenBehaviourPercentagesSingleDaySingleNonSolarUser(bencompareData, solar, wind, totalmix, DateOfEnergyConsumption).ToString();
+      var result = pythonCalculationFile.greenBehaviourPercentagesSingleDaySingleNonSolarUser(
+        bencompareData,
+        solar,
+        wind,
+        totalmix,
+        DateOfEnergyConsumption
+      );
 
-      return Ok(dailyGreenPercentageScores);
+      // Extract values from dynamic object
+      string rawJson = result[0];
+      var userGreenScore = (double)result[1];
+      var gridGreenScore = (double)result[2];
+
+      var userScoreList = JsonSerializer.Deserialize<List<UserScoreData>>(rawJson);
+      
+      var bencompareModel = new UserScoreWrapper
+      {
+        Data = userScoreList,
+        PercentageOfUserDailyGreenConsumption = userGreenScore,
+        PercentageOfGridDailyGreenConsumption = gridGreenScore
+      };
+
+      return Ok(bencompareModel);
     }
   }
 }

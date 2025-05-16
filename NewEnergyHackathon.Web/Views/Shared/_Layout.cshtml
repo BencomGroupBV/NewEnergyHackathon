@@ -55,6 +55,13 @@
         </a>
       </li>
 
+      <li class="nav-item @(IsActive("Home", "UserEnergyConsumption") ? "active" : "")">
+        <a class="nav-link" asp-controller="Home" asp-action="UserEnergyConsumption">
+          <i class="fas fa-fw fa-house"></i>
+          <span>Energy Consumption Breakdown</span>
+        </a>
+      </li>
+
       <li class="nav-item @(IsActive("Home", "GreenEnergyForecast") ? "active" : "")">
         <a class="nav-link" asp-controller="Home" asp-action="GreenEnergyForecast">
           <i class="fas fa-fw fa-house"></i>
@@ -62,7 +69,9 @@
         </a>
       </li>
 
-      @* <li class="nav-item @(IsActive("Home", "History") ? "active" : "")">
+
+      @*<li class="nav-item @(IsActive("Home", "History") ? "active" : "")">
+       <li class="nav-item @(IsActive("Home", "History") ? "active" : "")">
         <a class="nav-link" asp-controller="Home" asp-action="History">
           <i class="fas fa-fw fa-folder"></i>
           <span>History</span>
