@@ -49,7 +49,7 @@ public class UsageChartController(INedService nedService, IBenCompareService ben
 
       dynamic pythonCalculationFile = Py.Import("datawrangling");
 
-      var bencompareData = benCompareService.GetBencompareData();
+      var bencompareData = benCompareService.GetBencompareData(DateOfEnergyConsumption);
 
       var dailyGreenPercentageScores = pythonCalculationFile
         .greenBehaviourPercentagesSingleDaySingleNonSolarUser(bencompareData, solar, wind, totalmix, DateOfEnergyConsumption).ToString();
