@@ -32,7 +32,7 @@ namespace NewEnergyHackathon.Web.Controllers
 		dynamic sys = Py.Import("sys");
 		sys.path.append(".");
 
-		dynamic calc = Py.Import("calculation");
+		dynamic calc = Py.Import("datawrangling");
 		string resultJson = calc.calculate(jsonInput).ToString();
 
 		var result = JsonSerializer.Deserialize<Dictionary<string, object>>(resultJson);

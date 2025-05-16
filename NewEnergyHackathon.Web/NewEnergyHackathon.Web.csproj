@@ -10,11 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="calculation.py" />
+    <None Remove="datawrangling.py" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="calculation.py">
+    <Content Include="datawrangling.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
