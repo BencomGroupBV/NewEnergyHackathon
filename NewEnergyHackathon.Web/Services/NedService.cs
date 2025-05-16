@@ -16,14 +16,7 @@ public class NedService : INedService
 
   public NedService(HttpClient httpClient)
   {
-    HttpClientHandler handler = new HttpClientHandler
-    {
-      ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator,
-      SslProtocols = SslProtocols.Tls12 // or SslProtocols.Tls13 if supported
-    };
-    HttpClient client = new HttpClient(handler);
-
-    _httpClient = client;
+    _httpClient = httpClient;
     _httpClient.DefaultRequestHeaders.Clear();
     _httpClient.DefaultRequestHeaders.Add("X-AUTH-TOKEN",
       "a1997970697c96b6513b010c15e586c769eb33d5281064c5bffb5c9c24d48464");
@@ -59,8 +52,9 @@ public class NedService : INedService
 
       if (root.TryGetProperty("hydra:member", out var members))
       {
-        foreach (var item in members.EnumerateArray())
-          allResults.Add(JsonDocument.Parse(item.GetRawText()).RootElement.Clone()); // fixes disposed object. JsonDocument, maybe todo nicer
+        allResults.AddRange(members.EnumerateArray()
+          .Select(item => JsonDocument
+            .Parse(item.GetRawText()).RootElement.Clone()));
       }
 
       if (root.TryGetProperty("hydra:view", out var view) &&
@@ -79,5 +73,4 @@ public class NedService : INedService
 
     return jsonOutput;
   }
-
 }

@@ -4,12 +4,20 @@ using NewEnergyHackathon.Web.Services;
 namespace NewEnergyHackathon.Web.Controllers;
 
 [ApiController]
-public class SmartMeterController(ISmartMeterService smartMeterService) : Controller
+public class SmartMeterController(ISmartMeterService smartMeterService, IBenCompareService benCompareService) : Controller
 {
   [HttpGet("smartmeterdata")]
   public IActionResult Index()
   {
     var userData = smartMeterService.GetSmartMeterData();
+
+    return Ok(userData);
+  }
+
+  [HttpGet("smartmeterdata-no-solar-pannels")]
+  public IActionResult BencompareUsage()
+  {
+    var userData = benCompareService.GetBencompareData();
 
     return Ok(userData);
   }
