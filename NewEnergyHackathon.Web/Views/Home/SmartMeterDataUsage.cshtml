@@ -16,84 +16,41 @@
 
 </div>
 <script>
-  fetch('/smartmeterdata-no-solar-pannels')
+  fetch('/smartmeterdata')
     .then(res => res.json())
     .then(data => {
-      const labels = data.map(item => item.Items_Timestamp_UTC);
-      const values = data.map(item => item.Items_ConsumptionDeliveryTotal);
+      const firstReading = data[0];
+      const labels = Object.keys(firstReading.timeSeries);
+      const values = Object.values(firstReading.timeSeries);
 
       new Chart(document.getElementById('smartMeterChart'), {
         type: 'line',
         data: {
           labels: labels,
           datasets: [{
-            label: 'Smart Meter Consumption (kWh)',
+            label: `${firstReading.entityId} (${firstReading.unit})`,
             data: values,
-            borderColor: 'rgba(54, 162, 235, 0.8)',
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
             borderWidth: 2,
-            fill: true,
-            tension: 0.4,
-            pointRadius: 0
+            fill: false,
+            tension: 0.1
           }]
         },
         options: {
           responsive: true,
-          layout: {
-            padding: 20
-          },
           scales: {
             x: {
               type: 'time',
               time: {
-                parser: 'YYYY-MM-DD HH:mm:ssZ',
-                tooltipFormat: 'MMM D, HH:mm',
-                unit: 'day',
-                displayFormats: {
-                  day: 'MMM D'
-                }
-              },
-              ticks: {
-                autoSkip: true,
-                maxTicksLimit: 7,
-                font: {
-                  size: 10
-                },
-                maxRotation: 0,
-                minRotation: 0
-              },
-              title: {
-                display: true,
-                text: 'Date'
+                parser: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
+                tooltipFormat: 'll HH:mm',
+                unit: 'hour'
               }
             },
             y: {
-              beginAtZero: true,
-              title: {
-                display: true,
-                text: 'Consumption (kWh)'
-              }
-            }
-          },
-          plugins: {
-            tooltip: {
-              mode: 'index',
-              intersect: false,
-              callbacks: {
-                label: function(context) {
-                  return ` ${context.dataset.label}: ${context.raw} kWh`;
-                }
-              }
-            },
-            legend: {
-              display: true,
-              position: 'top'
+              beginAtZero: true
             }
           }
         }
       });
     });
-
-
-
 </script>
