@@ -15,89 +15,113 @@
           <canvas id="smartMeterChart"></canvas>
         </div>
       </div>
-    </div>
-    </div>
 
+      <div id="greenEnergyTip" class="mt-3 p-3 bg-success text-white rounded shadow-sm">
+      </div>
+
+
+    </div>
   </div>
-  <script>
-    fetch('/smartmeterdata-no-solar-pannels')
-      .then(res => res.json())
-      .then(data => {
-        const labels = data.map(item => item.Items_Timestamp_UTC);
-        const values = data.map(item => item.Items_ConsumptionDeliveryTotal);
 
-        new Chart(document.getElementById('smartMeterChart'), {
-          type: 'line',
-          data: {
-            labels: labels,
-            datasets: [{
-              label: 'Smart Meter Consumption (kWh)',
-              data: values,
-              borderColor: 'rgba(54, 162, 235, 0.8)',
-              backgroundColor: 'rgba(54, 162, 235, 0.2)',
-              borderWidth: 2,
-              fill: true,
-              tension: 0.4,
-              pointRadius: 0
-            }]
+</div>
+
+<script>
+  const greenTips = [
+    "Duurzame energie? Kies het juiste moment!<br><br>Tussen 13:00 en 15:00 uur draait Nederland op groene stroom. Tip: laat de kinderen hun tablets opladen of zet alvast de was aan. Zo leert het hele gezin bewuster omgaan met energie – zonder moeite!",
+    "Groenste uren vandaag: 14:15 – 16:30 uur<br><br>In deze periode komt >85% van de stroom uit zon en wind. Plan slim: stel je was uit tot vanmiddag, laad je laptop op of start een warm programma in de vaatwasser. Kleine keuzes, groot effect.",
+    "Help het net én het klimaat<br><br>Vandaag is er veel groene stroom beschikbaar tussen 11:30 en 14:00 uur. Door je apparaten in deze periode te gebruiken, verlaag je jouw CO₂-voetafdruk en help je mee om het stroomnet in balans te houden. Denk aan je vaatwasser, elektrische fiets opladen of het voorverwarmen van je oven.",
+    "Gebruik stroom wanneer deze het duurzaamst is<br><br>Tussen 12:45 en 15:00 uur is het aandeel zonne- en windenergie op zijn hoogst. Zet in dit tijdvak energie-intensieve apparaten aan zoals je wasmachine, droger of laadpaal. Zo benut je maximaal de groene stroom van vandaag."
+  ];
+
+  function displayRandomTip() {
+    const randomIndex = Math.floor(Math.random() * greenTips.length);
+    document.getElementById('greenEnergyTip').innerHTML = greenTips[randomIndex];
+  }
+
+  // Trigger on page load
+  window.onload = displayRandomTip;
+</script>
+
+
+<script>
+  fetch('/smartmeterdata-no-solar-pannels')
+    .then(res => res.json())
+    .then(data => {
+      const labels = data.map(item => item.Items_Timestamp_UTC);
+      const values = data.map(item => item.Items_ConsumptionDeliveryTotal);
+
+      new Chart(document.getElementById('smartMeterChart'), {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Smart Meter Consumption (kWh)',
+            data: values,
+            borderColor: 'rgba(54, 162, 235, 0.8)',
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.4,
+            pointRadius: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          layout: {
+            padding: 20
           },
-          options: {
-            responsive: true,
-            layout: {
-              padding: 20
-            },
-            scales: {
-              x: {
-                type: 'time',
-                time: {
-                  parser: 'YYYY-MM-DD HH:mm:ssZ',
-                  tooltipFormat: 'MMM D, HH:mm',
-                  unit: 'day',
-                  displayFormats: {
-                    day: 'MMM D'
-                  }
-                },
-                ticks: {
-                  autoSkip: true,
-                  maxTicksLimit: 7,
-                  font: {
-                    size: 10
-                  },
-                  maxRotation: 0,
-                  minRotation: 0
-                },
-                title: {
-                  display: true,
-                  text: 'Date'
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                parser: 'YYYY-MM-DD HH:mm:ssZ',
+                tooltipFormat: 'MMM D, HH:mm',
+                unit: 'day',
+                displayFormats: {
+                  day: 'MMM D'
                 }
               },
-              y: {
-                beginAtZero: true,
-                title: {
-                  display: true,
-                  text: 'Consumption (kWh)'
-                }
+              ticks: {
+                autoSkip: true,
+                maxTicksLimit: 7,
+                font: {
+                  size: 10
+                },
+                maxRotation: 0,
+                minRotation: 0
+              },
+              title: {
+                display: true,
+                text: 'Date'
               }
             },
-            plugins: {
-              tooltip: {
-                mode: 'index',
-                intersect: false,
-                callbacks: {
-                  label: function(context) {
-                    return ` ${context.dataset.label}: ${context.raw} kWh`;
-                  }
-                }
-              },
-              legend: {
+            y: {
+              beginAtZero: true,
+              title: {
                 display: true,
-                position: 'top'
+                text: 'Consumption (kWh)'
               }
             }
+          },
+          plugins: {
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              callbacks: {
+                label: function(context) {
+                  return ` ${context.dataset.label}: ${context.raw} kWh`;
+                }
+              }
+            },
+            legend: {
+              display: true,
+              position: 'top'
+            }
           }
-        });
+        }
       });
+    });
 
 
 
-  </script>
+</script>
