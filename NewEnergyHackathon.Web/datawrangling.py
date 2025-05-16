@@ -172,7 +172,7 @@ def greenBehaviourPercentagesSingleDaySingleNonSolarUser(object_meterreading_ben
     green_percentage_consumtpion_single_day = (df_Complete_total_Green_consumption_singleDay/df_Complete_total_consumption_singleDay)*100
     df_Complete_total_Green_production_singleDay = df_Complete['TotalGreen_Percentage'].mean()
 
-    return green_percentage_consumtpion_single_day, df_Complete_total_Green_production_singleDay
+    return df_Complete.to_json(orient='records'), green_percentage_consumtpion_single_day, df_Complete_total_Green_production_singleDay
 
 
 # def greenBehaviourPercentagesSingleDaySingleNonSolarUser(object_meterreading_bencompare, object_SolarInput_SingleDay, object_WindInput_SingleDay, object_TotalMixInput_SingleDay, dateValueStrFormat):
