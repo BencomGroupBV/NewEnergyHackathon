@@ -100,7 +100,7 @@ public class UsageChartController(INedService nedService, IBenCompareService ben
         DateOfEnergyConsumption
       );
 
-      var rawJson = result[0];
+      var rawJson = result[0].ToString();
       var userGreenScore = (double)result[1];
       var gridGreenScore = (double)result[2];
 

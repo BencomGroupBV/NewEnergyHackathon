@@ -15,11 +15,11 @@
   <div class="col-xl-8 col-lg-7">
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Verbruiksinzicht</h6>
       </div>
       <div class="card-body">
-        <div class="chart-area">
-          <canvas id="smartMeterChart" style="height: 100%; width:100%;"></canvas>
+        <div class="chart-area" style="width:100%;height:100%;">
+          <canvas id="userConsumptionChart"></canvas>
 
           <div class="row">
             <div class="col">
@@ -31,7 +31,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr id="comparisonRow">
+                  <tr id="comparisonRow" style="padding-top:5px;">
                     <td class="left text-center">60%</td>
                     <td class="right text-center">55%</td>
                   </tr>
@@ -111,84 +111,83 @@
 
 
 <script>
-  fetch('/smartmeterdata-no-solar-pannels')
-    .then(res => res.json())
-    .then(data => {
-           const labels = data.map(item => item.Items_Timestamp_UTC);
-      const values = data.map(item => item.Items_ConsumptionDeliveryTotal);
+     // fetch('/smartmeterdata-no-solar-pannels')
+    fetch('/daily-green-consumption?dateTo=2025-03-23&dateFrom=2025-03-21')
+    .then(response => response.json())
+    .then(wrapper => {
+      console.log(wrapper);
+      const dataset = wrapper.data;
 
-      new Chart(document.getElementById('smartMeterChart'), {
-        type: 'line',
+      const labels = dataset.map((item) => {
+        const asDate = new Date(item.items_Timestamp_UTC);
+
+        return `${String(asDate.getUTCHours()).padStart(2, '0')}:${String(asDate.getUTCMinutes()).padStart(2, '0')}`;
+      });
+      const greenData = dataset.map(entry => entry.consumptionDeliveryTotal_Green / 1000);
+      const nonGreenData = dataset.map(entry => entry.consumptionDeliveryTotal_NoGreen / 1000);
+
+      const ctx = document.getElementById('userConsumptionChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
         data: {
           labels: labels,
-          datasets: [{
-            label: 'Smart Meter Consumption (kWh)',
-            data: values,
-            borderColor: 'rgba(54, 162, 235, 0.8)',
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderWidth: 2,
-            fill: true,
-            tension: 0.4,
-            pointRadius: 0
-          }]
+          datasets: [
+            {
+              label: 'Groen',
+              data: greenData,
+              backgroundColor: 'rgba(0, 255, 0, 0.5)',
+              borderColor: 'rgba(0, 255, 0, 0.5)',
+              borderWidth: 1
+            },
+            {
+              label: 'Niet groen',
+              data: nonGreenData,
+              backgroundColor: 'rgba(99, 102, 106, 0.5)',
+              borderColor: 'rgba(99, 102, 106, 0.5)',
+              borderWidth: 1
+            }
+          ]
         },
         options: {
           responsive: true,
-          layout: {
-            padding: 20
-          },
           scales: {
-            x: {
-              type: 'time',
-              time: {
-                parser: 'YYYY-MM-DD HH:mm:ssZ',
-                tooltipFormat: 'MMM D, HH:mm',
-                unit: 'day',
-                displayFormats: {
-                  day: 'MMM D'
-                }
-              },
-              ticks: {
-                autoSkip: true,
-                maxTicksLimit: 7,
-                font: {
-                  size: 10
-                },
-                maxRotation: 0,
-                minRotation: 0
-              },
-              title: {
+            xAxes: [{
+              stacked: true,
+              scaleLabel: {
                 display: true,
-                text: 'Date'
+                labelString: 'Tijdstip',
+                fontSize: 14,
+                fontStyle: 'bold'
               }
-            },
-            y: {
-              beginAtZero: true,
-              title: {
+            }],
+            yAxes: [{
+              stacked: true,
+              scaleLabel: {
                 display: true,
-                text: 'Consumption (kWh)'
+                labelString: 'Verbruik (kWh)',
+                fontSize: 14,
+                fontStyle: 'bold'
+              },
+            }]
+          },
+          tooltips: {
+            mode: 'index',
+            intersect: false,
+            callbacks: {
+              label: function(tooltipItem, data) {
+                const dataset = data.datasets[tooltipItem.datasetIndex];
+                const value = dataset.data[tooltipItem.index];
+                return `${dataset.label}: ${Math.round(value)} kWh`;
               }
             }
           },
           plugins: {
-            tooltip: {
-              mode: 'index',
-              intersect: false,
-              callbacks: {
-                label: function(context) {
-                  return ` ${context.dataset.label}: ${context.raw} kWh`;
-                }
-              }
-            },
             legend: {
-              display: true,
               position: 'top'
             }
           }
         }
       });
-    });
-
-
-
+    })
+    .catch(error => console.error('Error loading chart data:', error));
 </script>
