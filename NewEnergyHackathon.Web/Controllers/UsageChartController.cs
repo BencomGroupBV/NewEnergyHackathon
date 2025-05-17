@@ -56,7 +56,7 @@ public class UsageChartController(INedService nedService, IBenCompareService ben
         DailyGreenScoreGrid = gridGreenScore
       };
 
-      ViewBag.DailyGreenScoreGrid = gridGreenScore;
+  
 
       return Ok(energyMixModel);
     }

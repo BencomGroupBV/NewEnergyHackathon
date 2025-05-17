@@ -188,30 +188,30 @@
     });
   </script>
 
-<script>
-    function buildGraph(data) {
+  <script>
+    function buildGraph(data, score) {
       Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
       Chart.defaults.global.defaultFontColor = '#858796';
 
-      var ctx = document.getElementById("forecastChart");
-      const stackedChart = new Chart(ctx, {
+      const ctx = document.getElementById("forecastChart");
+
+      new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: data.map((input) => {
+          labels: data.map(input => {
             const date = new Date(input.validfrom);
-
             return `${String(date.getUTCHours()).padStart(2, '0')}:${String(date.getUTCMinutes()).padStart(2, '0')}`;
           }),
           datasets: [
             {
               label: 'Wind',
-              data: data.map((input) => input.Wind_Percentage),
+              data: data.map(input => input.wind_Percentage),
               backgroundColor: '#82b9ea',
               stack: 'combined'
             },
             {
               label: 'Solar',
-              data: data.map((input) => input.Solar_Percentage),
+              data: data.map(input => input.solar_Percentage),
               backgroundColor: '#f9c951',
               stack: 'combined'
             }
@@ -261,12 +261,27 @@
           }
         }
       });
+
+      const roundedScore = score.toFixed(1);
+      document.getElementById("score1").textContent = `${roundedScore}%`;
+      document.getElementById("explanation1").textContent = `This day ${roundedScore}% of all energy on the grid was green.`;
     }
 
     document.addEventListener("DOMContentLoaded", function () {
       fetch('/daily-green-energy?dateTo=2025-03-23&dateFrom=2025-03-21')
         .then(res => res.json())
-        .then(data => buildGraph(data));
+        .then(result => {
+          const data = result.data;
+          const score = result.dailyGreenScoreGrid;
+
+          if (!Array.isArray(data)) {
+            console.error("Expected 'data' to be an array:", data);
+            return;
+          }
+
+          buildGraph(data, score);
+        })
+        .catch(err => console.error("Fetch or render error:", err));
     });
 </script>
 }
