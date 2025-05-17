@@ -179,7 +179,57 @@ def greenBehaviourPercentagesSingleDaySingleNonSolarUser(object_meterreading_ben
 
     df_Complete['validfrom'] = df_Complete['validfrom'].str[:-6]
 
-    return df_Complete.to_json(orient='records'), green_percentage_consumtpion_single_day, df_Complete_total_Green_production_singleDay
+    # green 3 hrs interval
+    df_Complete['Green_percentage_normalized'] = (df_Complete['TotalGreen_Percentage'] - df_Complete['TotalGreen_Percentage'].min()) / (df_Complete['TotalGreen_Percentage'].max() - df_Complete['TotalGreen_Percentage'].min())
+
+    number_of_rows = 13
+    total_rows = len(df_Complete)
+
+    percentage_score_intervals_list = []
+
+    for i in range(total_rows - number_of_rows):
+
+        start_value = df_Complete['validfrom'][i]
+        end_value = df_Complete['validfrom'][i+number_of_rows-1]
+
+        list_indexes = []
+
+        for j in range(i, i+number_of_rows):
+            list_indexes.append(j)
+
+        df_Complete_trimmed = df_Complete.loc[df_Complete.index.isin(list_indexes)]
+
+        sum_percentages = df_Complete_trimmed['Green_percentage_normalized'].sum()
+
+        percentage_score_intervals = {
+            'interval_start_time': start_value,
+            'interval_end_time': end_value,
+            'sum_percentages': sum_percentages
+        }
+        
+        percentage_score_intervals_list.append(percentage_score_intervals)
+
+        percentage_value_list = []
+
+    for i in percentage_score_intervals_list:
+        percentage_value = i['sum_percentages']
+
+        percentage_value_list.append(percentage_value)
+
+    max_value = max(percentage_value_list)
+
+    for i in percentage_score_intervals_list:
+        percentage_value = i['sum_percentages']
+
+        if percentage_value == max_value:
+
+            Green_start_interval = i['interval_start_time']
+            Green_final_interval = i['interval_end_time']
+
+        else: 
+            continue
+
+    return df_Complete.to_json(orient='records'), green_percentage_consumtpion_single_day, df_Complete_total_Green_production_singleDay, Green_start_interval, Green_final_interval
 
 
 # def greenBehaviourPercentagesSingleDaySingleNonSolarUser(object_meterreading_bencompare, object_SolarInput_SingleDay, object_WindInput_SingleDay, object_TotalMixInput_SingleDay, dateValueStrFormat):
