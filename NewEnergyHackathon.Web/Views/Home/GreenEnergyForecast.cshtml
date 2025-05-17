@@ -1,70 +1,67 @@
 ﻿@{
-    ViewBag.Title = "Dashboard";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+  ViewBag.Title = "Dashboard";
+  Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="d-flex justify-content-center align-items-center mb-4">
-    <button id="prevDay" class="btn btn-outline-secondary me-2">&#8592;</button>
-
-    <input type="date" id="selectedDate" class="form-control text-center" style="max-width: 200px;" />
-
-    <button id="nextDay" class="btn btn-outline-secondary ms-2">&#8594;</button>
+  <button id="prevDay" class="btn btn-outline-secondary me-2">&#8592;</button>
+  <input type="date" id="selectedDate" class="form-control text-center" style="max-width: 200px;" />
+  <button id="nextDay" class="btn btn-outline-secondary ms-2">&#8594;</button>
 </div>
 
 <div class="container-fluid">
-    <div class="row mb-4">
-        <!-- Graph 1 -->
-        <div class="col">
-            <div class="card shadow">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Groene stroom voorspelling</h6>
-                </div>
-                <div class="card-body">
-                    <div class="chart-area" style="height: 100%; width:100%;">
-                        <canvas id="forecastChart"></canvas>
-                    </div>
-                    <div class="mt-4 text-center">
-                        <h5>Score: <span id="score1">Score: 50%</span></h5>
-                        <p id="explanation1">This day 50% of all energy on the grid was green.</p>
-                    </div>
-                </div>
-            </div>
+  <div class="row mb-4">
+    <!-- Graph 1 -->
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Groene stroom voorspelling</h6>
         </div>
+        <div class="card-body">
+          <div class="chart-area" style="height: 100%; width:100%;">
+            <canvas id="forecastChart"></canvas>
+          </div>
+          <div class="mt-4 text-center">
+            <h5>Score: <span id="score1">Score: 50%</span></h5>
+            <p id="explanation1">This day 50% of all energy on the grid was green.</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <div id="greenEnergyTip" class="mt-3 p-3 bg-success text-white rounded shadow-sm" />
+    <div id="greenEnergyTip" class="mt-3 p-3 bg-success text-white rounded shadow-sm"></div>
   </div>
-    </div>
-
-    <div class="row">
-        <!-- Graph 2 -->
-        <div class="col">
-            <div class="card shadow">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-success">Verbruik</h6>
-                </div>
-                <div class="card-body">
-                    <div class="chart-pie pt-4 pb-2">
-                        <canvas id="usageChart"></canvas>
-                    </div>
-                    <div class="mt-4 text-center">
-                        <h5>Score: <span id="score2">Model.Score2hoi</span></h5>
-                        <p id="explanation2">Model.Explanation2</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
+<div class="row">
+  <!-- Graph 2 -->
+  <div class="col">
+    <div class="card shadow">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-success">Verbruik</h6>
+      </div>
+      <div class="card-body">
+        <div class="chart-pie pt-4 pb-2">
+          <canvas id="usageChart"></canvas>
+        </div>
+        <div class="mt-4 text-center">
+          <h5>Score: <span id="score2">Model.Score2hoi</span></h5>
+          <p id="explanation2">Model.Explanation2</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
 
 @section Scripts {
   <script>
     const greenTips = [
-      "Duurzame energie? Kies het juiste moment!<br><br>Tussen 13:00 en 15:00 uur draait Nederland op groene stroom. Tip: laat de kinderen hun tablets opladen of zet alvast de was aan. Zo leert het hele gezin bewuster omgaan met energie – zonder moeite!",
-      "Groenste uren vandaag: 14:15 – 16:30 uur<br><br>In deze periode komt >85% van de stroom uit zon en wind. Plan slim: stel je was uit tot vanmiddag, laad je laptop op of start een warm programma in de vaatwasser. Kleine keuzes, groot effect.",
-      "Help het net én het klimaat<br><br>Vandaag is er veel groene stroom beschikbaar tussen 11:30 en 14:00 uur. Door je apparaten in deze periode te gebruiken, verlaag je jouw CO₂-voetafdruk en help je mee om het stroomnet in balans te houden. Denk aan je vaatwasser, elektrische fiets opladen of het voorverwarmen van je oven.",
-      "Gebruik stroom wanneer deze het duurzaamst is<br><br>Tussen 12:45 en 15:00 uur is het aandeel zonne- en windenergie op zijn hoogst. Zet in dit tijdvak energie-intensieve apparaten aan zoals je wasmachine, droger of laadpaal. Zo benut je maximaal de groene stroom van vandaag."
-    ];
+       "Duurzame energie? Kies het juiste moment!<br><br>Tussen 13:00 en 15:00 uur draait Nederland op groene stroom. Tip: laat de kinderen hun tablets opladen of zet alvast de was aan. Zo leert het hele gezin bewuster omgaan met energie – zonder moeite!",
+       "Groenste uren vandaag: 14:15 – 16:30 uur<br><br>In deze periode komt >85% van de stroom uit zon en wind. Plan slim: stel je was uit tot vanmiddag, laad je laptop op of start een warm programma in de vaatwasser. Kleine keuzes, groot effect.",
+       "Help het net én het klimaat<br><br>Vandaag is er veel groene stroom beschikbaar tussen 11:30 en 14:00 uur. Door je apparaten in deze periode te gebruiken, verlaag je jouw CO₂-voetafdruk en help je mee om het stroomnet in balans te houden. Denk aan je vaatwasser, elektrische fiets opladen of het voorverwarmen van je oven.",
+       "Gebruik stroom wanneer deze het duurzaamst is<br><br>Tussen 12:45 en 15:00 uur is het aandeel zonne- en windenergie op zijn hoogst. Zet in dit tijdvak energie-intensieve apparaten aan zoals je wasmachine, droger of laadpaal. Zo benut je maximaal de groene stroom van vandaag."
+     ];
 
     function displayRandomTip() {
       const randomIndex = Math.floor(Math.random() * greenTips.length);
@@ -77,11 +74,11 @@
 
     function navigateTo(date) {
       const formattedDate = formatDate(date);
-      window.location.href = `/daily-green-energy?dateTo=${formattedDate}&dateFrom=${formattedDate}`;
+      window.location.href = `/Home/GreenEnergyForecast?dateTo=${formattedDate}&dateFrom=${formattedDate}`;
     }
 
     function buildGraph(data) {
-      Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+      Chart.defaults.global.defaultFontFamily = 'Nunito';
       Chart.defaults.global.defaultFontColor = '#858796';
 
       const ctx = document.getElementById("forecastChart").getContext('2d');
@@ -96,13 +93,13 @@
           datasets: [
             {
               label: 'Wind',
-              data: data.map((input) => input.Wind_Percentage),
+              data: data.map((input) => input.Wind_Percentage ?? input.wind_Percentage ?? 0),
               backgroundColor: '#82b9ea',
               stack: 'combined'
             },
             {
               label: 'Solar',
-              data: data.map((input) => input.Solar_Percentage),
+              data: data.map((input) => input.Solar_Percentage ?? input.solar_Percentage ?? 0),
               backgroundColor: '#f9c951',
               stack: 'combined'
             }
@@ -120,9 +117,7 @@
               }
             }
           },
-          legend: {
-            position: 'bottom'
-          },
+          legend: { position: 'bottom' },
           scales: {
             xAxes: [{
               stacked: true,
@@ -152,24 +147,37 @@
       });
     }
 
+    function buildGraphWithScore(data, score) {
+      buildGraph(data);
+      const roundedScore = score?.toFixed(1) ?? "0.0";
+      document.getElementById("score1").textContent = `${roundedScore}%`;
+      document.getElementById("explanation1").textContent = `This day ${roundedScore}% of all energy on the grid was green.`;
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
       displayRandomTip();
 
       const dateInput = document.getElementById('selectedDate');
       const urlParams = new URLSearchParams(window.location.search);
       const beforeParam = urlParams.get('dateFrom');
-      const defaultDate = new Date('2025-05-22');
+      const defaultDate = new Date('2025-03-22');
       const selected = beforeParam ? new Date(beforeParam) : defaultDate;
-
-      dateInput.value = formatDate(selected);
-
-      // Load data for initial date
       const selectedDateStr = formatDate(selected);
+      dateInput.value = selectedDateStr;     
+
       fetch(`/daily-green-energy?dateTo=${selectedDateStr}&dateFrom=${selectedDateStr}`)
         .then(res => res.json())
-        .then(data => buildGraph(data));
+        .then(result => {
+          const data = result.data;
+          const score = result.dailyGreenScoreGrid;
+          if (!Array.isArray(data)) {
+            console.error("Expected 'data' to be an array:", data);
+            return;
+          }
+          buildGraphWithScore(data, score);
+        })
+        .catch(err => console.error("Fetch or render error:", err));
 
-      // Navigation buttons
       document.getElementById('prevDay').addEventListener('click', function () {
         const newDate = new Date(dateInput.value);
         newDate.setDate(newDate.getDate() - 1);
@@ -188,7 +196,7 @@
     });
   </script>
 
-  <script>
+@*   <script>
     function buildGraph(data, score) {
       Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
       Chart.defaults.global.defaultFontColor = '#858796';
@@ -283,5 +291,5 @@
         })
         .catch(err => console.error("Fetch or render error:", err));
     });
-</script>
+  </script> *@
 }
