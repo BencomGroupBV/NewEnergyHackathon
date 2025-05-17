@@ -9,7 +9,7 @@ public class EnergyMixDataWrapper
 
 public class EnergyMixEntry
 {
-  public DateTime Validfrom { get; set; }
+  public string validfrom { get; set; }
   public double Volume_Solar { get; set; }
   public double Volume_Wind { get; set; }
   public double Volume_TotalMix { get; set; }
