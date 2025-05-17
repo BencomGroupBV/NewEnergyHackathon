@@ -34,8 +34,8 @@
                 </thead>
                 <tbody>
                   <tr id="comparisonRow" style="padding-top:5px;">
-                    <td class="left text-center">60%</td>
-                    <td class="right text-center">55%</td>
+                    <td class="left text-center">49.2%</td>
+                    <td class="right text-center">43.2%</td>
                   </tr>
                 </tbody>
               </table>
@@ -86,7 +86,7 @@
   // Feedback options for users outperforming the netmix
   const outperformOptions = [
     "💡 <strong>Je zit goed!</strong><br>Afgelopen week was gemiddeld 62% van de stroom op het net groen. Jouw verbruik bestond zelfs voor 74% uit duurzame energie. Door je apparaten op de juiste momenten te gebruiken, draag je al flink bij aan de energietransitie.<br>➡️ Bekijk wanneer de stroom vandaag en morgen het groenst is, en blijf slim plannen.",
-    "🌿 <strong>Mooi gedaan!</strong><br>Jij hebt 12% méér groene energie gebruikt dan het landelijke gemiddelde. Dat betekent minder CO₂-uitstoot en een slimme inzet van duurzame bronnen.<br>➡️ Wil je dit vasthouden? Check hier wanneer je het beste je apparaten kunt gebruiken.",
+    "🌿 <strong>Mooi gedaan!</strong><br>Jij hebt 14% méér groene energie gebruikt dan het landelijke gemiddelde. Dat betekent minder CO₂-uitstoot en een slimme inzet van duurzame bronnen.<br>➡️ Wil je dit vasthouden? Check hier wanneer je het beste je apparaten kunt gebruiken.",
     "✅ <strong>Je maakt echt verschil.</strong><br>Waar het landelijk gemiddelde op 58% lag, zat jij deze week op 70% groen verbruik. Door kleine aanpassingen in je routines draag je al bij aan een schoner net.<br>➡️ Tip: bekijk hier het verwachte groene energiemoment van vandaag en morgen om verder te optimaliseren."
   ];
 
@@ -179,7 +179,8 @@
               label: function(tooltipItem, data) {
                 const dataset = data.datasets[tooltipItem.datasetIndex];
                 const value = dataset.data[tooltipItem.index];
-                return `${dataset.label}: ${Math.round(value)} kWh`;
+
+                return `${dataset.label}: ${Math.round(value * 1000)} Wh`;
               }
             }
           },
