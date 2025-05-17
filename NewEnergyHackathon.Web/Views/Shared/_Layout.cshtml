@@ -39,19 +39,19 @@
 
       <hr class="sidebar-divider my-0">
 
-      <li class="nav-item @(IsActive("Home", "Index") ? "active" : "")">
+  @*     <li class="nav-item @(IsActive("Home", "Index") ? "active" : "")">
         <a class="nav-link" href="/">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span>
         </a>
-      </li>
+      </li> *@
 
       <hr class="sidebar-divider">
 
       <li class="nav-item @(IsActive("Home", "SmartMeterDataUsage") ? "active" : "")">
         <a class="nav-link" asp-controller="Home" asp-action="SmartMeterDataUsage">
-          <i class="fas fa-fw fa-folder"></i>
-          <span>Usages</span>
+          <i class="fas fa-fw fa-chart-line"></i>
+          <span>Mijn verbruik</span>
         </a>
       </li>
 
@@ -64,8 +64,8 @@
 
       <li class="nav-item @(IsActive("Home", "GreenEnergyForecast") ? "active" : "")">
         <a class="nav-link" asp-controller="Home" asp-action="GreenEnergyForecast">
-          <i class="fas fa-fw fa-house"></i>
-          <span>Green Energy Forecast</span>
+          <i class="fas fa-fw fa-leaf"></i>
+          <span>Groene stroom voorspelling</span>
         </a>
       </li>
 
@@ -81,7 +81,7 @@
       <li class="nav-item @(IsActive("Home", "Settings") ? "active" : "")">
         <a class="nav-link" asp-controller="Home" asp-action="Settings">
           <i class="fas fa-fw fa-cog"></i>
-          <span>Settings</span>
+          <span>Instellingen</span>
         </a>
       </li>
     </ul>
