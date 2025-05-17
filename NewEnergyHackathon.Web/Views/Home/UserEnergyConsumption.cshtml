@@ -82,7 +82,7 @@
               label: function(tooltipItem, data) {
                 const dataset = data.datasets[tooltipItem.datasetIndex];
                 const value = dataset.data[tooltipItem.index];
-                return `${dataset.label}: ${Math.round(value * 1000)} Wh`;
+                return `${dataset.label}: ${Math.round(value)} kWh`;
               }
             }
           },
