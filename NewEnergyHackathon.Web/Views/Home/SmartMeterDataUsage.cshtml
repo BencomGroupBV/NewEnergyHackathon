@@ -4,15 +4,17 @@
 }
 
 <div class="container-fluid">
-  <div class="d-flex justify-content-center align-items-center mb-4">
-    <button id="prevDay" class="btn btn-outline-secondary me-2">&#8592;</button>
 
-    <input type="date" id="selectedDate" class="form-control text-center" style="max-width: 200px;" value=@DateTime.Today.ToString("yyyy-MM-dd") />
-
-    <button id="nextDay" class="btn btn-outline-secondary ms-2">&#8594;</button>
-  </div>
 
   <div class="col-xl-8 col-lg-7">
+
+    <div class="d-flex justify-content-center align-items-center mb-4">
+      <button id="prevDay" class="btn btn-outline-secondary me-2">&#8592;</button>
+
+      <input type="date" id="selectedDate" class="form-control text-center" style="max-width: 200px;" value="2025-03-21" />
+
+      <button id="nextDay" class="btn btn-outline-secondary ms-2">&#8594;</button>
+    </div>
     <div class="card shadow mb-4">
       <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Verbruiksinzicht</h6>

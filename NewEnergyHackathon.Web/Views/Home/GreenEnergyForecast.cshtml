@@ -3,16 +3,17 @@
   Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="d-flex justify-content-center align-items-center mb-4">
-  <button id="prevDay" class="btn btn-outline-secondary me-2">&#8592;</button>
-  <input type="date" id="selectedDate" class="form-control text-center" style="max-width: 200px;" />
-  <button id="nextDay" class="btn btn-outline-secondary ms-2">&#8594;</button>
-</div>
 
 <div class="container-fluid">
   <div class="row mb-4">
     <!-- Graph 1 -->
-    <div class="col">
+    <div class="col-8">
+      <div class="d-flex justify-content-center align-items-center mb-4">
+        <button id="prevDay" class="btn btn-outline-secondary me-2">&#8592;</button>
+        <input type="date" id="selectedDate" class="form-control text-center" style="max-width: 200px;" />
+        <button id="nextDay" class="btn btn-outline-secondary ms-2">&#8594;</button>
+      </div>
+
       <div class="card shadow">
         <div class="card-header py-3">
           <h6 class="m-0 font-weight-bold text-primary">Groene stroom voorspelling</h6>
@@ -27,31 +28,12 @@
           </div>
         </div>
       </div>
+
+      <div id="greenEnergyTip" class="mt-3 p-3 bg-success text-white rounded shadow-sm"></div>
+
     </div>
 
-    <div id="greenEnergyTip" class="mt-3 p-3 bg-success text-white rounded shadow-sm"></div>
   </div>
-</div>
-
-<div class="row">
-  <!-- Graph 2 -->
-  <div class="col">
-    <div class="card shadow">
-      <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-success">Verbruik</h6>
-      </div>
-      <div class="card-body">
-        <div class="chart-pie pt-4 pb-2">
-          <canvas id="usageChart"></canvas>
-        </div>
-        <div class="mt-4 text-center">
-          <h5>Score: <span id="score2">Model.Score2hoi</span></h5>
-          <p id="explanation2">Model.Explanation2</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 </div>
 
 @section Scripts {
