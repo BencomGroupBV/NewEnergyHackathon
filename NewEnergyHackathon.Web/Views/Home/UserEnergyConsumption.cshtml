@@ -8,7 +8,7 @@
         <h6 class="m-0 font-weight-bold text-primary">Consumption Chart</h6>
       </div>
       <div class="card-body">
-        <div class="chart-area">
+        <div class="chart-area" style="width:100%;height:100%;">
           <canvas id="userConsumptionChart"></canvas>
         </div>
       </div>
@@ -23,9 +23,13 @@
     .then(wrapper => {
       const dataset = wrapper.data;
 
-      const labels = dataset.map(entry => entry.validFrom);
-      const greenData = dataset.map(entry => entry.consumptionDeliveryTotal_Green);
-      const nonGreenData = dataset.map(entry => entry.consumptionDeliveryTotal_NoGreen);
+      const labels = dataset.map((item) => {
+        const asDate = new Date(item.items_Timestamp_UTC);
+
+        return `${String(asDate.getUTCHours()).padStart(2, '0')}:${String(asDate.getUTCMinutes()).padStart(2, '0')}`;
+      });
+      const greenData = dataset.map(entry => entry.consumptionDeliveryTotal_Green / 1000);
+      const nonGreenData = dataset.map(entry => entry.consumptionDeliveryTotal_NoGreen / 1000);
 
       const ctx = document.getElementById('userConsumptionChart').getContext('2d');
       new Chart(ctx, {
@@ -52,33 +56,37 @@
         options: {
           responsive: true,
           scales: {
-            x: {
+            xAxes: [{
               stacked: true,
-              ticks: {
-                maxRotation: 90,
-                minRotation: 45,
-                autoSkip: true,
-                maxTicksLimit: 20
+              scaleLabel: {
+                display: true,
+                labelString: 'Time of Day',
+                fontSize: 14,
+                fontStyle: 'bold'
               }
-            },
-            y: {
+            }],
+            yAxes: [{
               stacked: true,
-              beginAtZero: true,
-              ticks: {
-                callback: function (value) {
-                  return value + ' wh';
-                }
+              scaleLabel: {
+                display: true,
+                labelString: 'Consumption (kWh)',
+                fontSize: 14,
+                fontStyle: 'bold'
+              },
+            }]
+          },
+          tooltips: {
+            mode: 'index',
+            intersect: false,
+            callbacks: {
+              label: function(tooltipItem, data) {
+                const dataset = data.datasets[tooltipItem.datasetIndex];
+                const value = dataset.data[tooltipItem.index];
+                return `${dataset.label}: ${Math.round(value * 1000)} Wh`;
               }
             }
           },
           plugins: {
-            tooltip: {
-              callbacks: {
-                label: function (context) {
-                  return `${context.dataset.label}: ${context.parsed.y.toFixed(2)} Wh`;
-                }
-              }
-            },
             legend: {
               position: 'top'
             }
