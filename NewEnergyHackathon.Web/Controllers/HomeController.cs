@@ -36,8 +36,8 @@ public class HomeController : Controller
   public IActionResult GreenEnergyForecast(DateTime? before, DateTime? after)
   {
 	// You can pass these values to the view via ViewBag, ViewData, or a ViewModel
-	ViewBag.BeforeDate = before?.ToString("yyyy-MM-dd");
-	ViewBag.AfterDate = after?.ToString("yyyy-MM-dd");
+	//ViewBag.BeforeDate = before?.ToString("yyyy-MM-dd");
+	//ViewBag.AfterDate = after?.ToString("yyyy-MM-dd");
 
 	return View();
   }

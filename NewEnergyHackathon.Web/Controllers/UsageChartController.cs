@@ -43,9 +43,22 @@ public class UsageChartController(INedService nedService, IBenCompareService ben
       dynamic pythonCalculationFile = Py.Import("datawrangling");
 
       var dailyGreenEnergyGrid = pythonCalculationFile
-        .percentageNEDGreenEnergySingleDay(solar, wind, totalmix, DateOfEnergyConsumption).ToString();
+        .percentageNEDGreenEnergySingleDay(solar, wind, totalmix, DateOfEnergyConsumption);
 
-      return Ok(dailyGreenEnergyGrid);
+      var rawjson = dailyGreenEnergyGrid[0].ToString();
+      var gridGreenScore = (double)dailyGreenEnergyGrid[1];
+
+      var gridData = JsonSerializer.Deserialize<List<EnergyMixEntry>>(rawjson);
+
+      var energyMixModel = new EnergyMixDataWrapper
+      {
+        Data = gridData,
+        DailyGreenScoreGrid = gridGreenScore
+      };
+
+      ViewBag.DailyGreenScoreGrid = gridGreenScore;
+
+      return Ok(energyMixModel);
     }
   }
 
@@ -87,8 +100,7 @@ public class UsageChartController(INedService nedService, IBenCompareService ben
         DateOfEnergyConsumption
       );
 
-      // Extract values from dynamic object
-      string rawJson = result[0];
+      var rawJson = result[0];
       var userGreenScore = (double)result[1];
       var gridGreenScore = (double)result[2];
 
