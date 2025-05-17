@@ -7,7 +7,7 @@
   <div class="d-flex justify-content-center align-items-center mb-4">
     <button id="prevDay" class="btn btn-outline-secondary me-2">&#8592;</button>
 
-    <input type="date" id="selectedDate" class="form-control text-center" style="max-width: 200px;" />
+    <input type="date" id="selectedDate" class="form-control text-center" style="max-width: 200px;" value=@DateTime.Today.ToString("yyyy-MM-dd") />
 
     <button id="nextDay" class="btn btn-outline-secondary ms-2">&#8594;</button>
   </div>
@@ -51,10 +51,8 @@
                 // Apply colors based on comparison
                 if (leftValue > rightValue) {
                   leftCell.style.color = 'green';
-                  rightCell.style.color = 'red';
                 } else {
                   leftCell.style.color = 'red';
-                  rightCell.style.color = 'green';
                 }
               </script>
 
