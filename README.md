@@ -57,8 +57,9 @@ Developed during the New Energy Hackathon 2025 @ Gasunie, Groningen.
 ```
 
 3. Install dependencies:
-   - .NET SDK
+   - .NET 8 SDK
    - Python 3.13
+      - pandas pip package   
    - Python.NET
 
 4. Run the app:
