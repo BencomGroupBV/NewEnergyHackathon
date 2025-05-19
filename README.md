@@ -96,3 +96,9 @@ docker run -p 5000:8080 new-energy-hackathon
 - [@Jeroen-Maat](https://github.com/Jeroen-Maat)
 - [@RonnyAtoche](https://github.com/RonnyAtoche)
 - [@henkbencom](https://github.com/henkbencom)
+
+---
+
+## 📝 License
+
+This project is licensed under the [ISC License](LICENSE).
