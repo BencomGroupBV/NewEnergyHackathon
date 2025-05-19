@@ -22,5 +22,3 @@ public class UserScoreData
   public double ConsumptionDeliveryTotal_Green { get; set; }
   public double ConsumptionDeliveryTotal_NoGreen { get; set; }
 }
-
-

@@ -1,6 +1,4 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using NewEnergyHackathon.Web.Models;
 
 namespace NewEnergyHackathon.Web.Controllers;
 public class HomeController : Controller
@@ -33,13 +31,9 @@ public class HomeController : Controller
     return View();
   }
 
-  public IActionResult GreenEnergyForecast(DateTime? before, DateTime? after)
+  public IActionResult GreenEnergyForecast()
   {
-	// You can pass these values to the view via ViewBag, ViewData, or a ViewModel
-	//ViewBag.BeforeDate = before?.ToString("yyyy-MM-dd");
-	//ViewBag.AfterDate = after?.ToString("yyyy-MM-dd");
-
-	return View();
+    return View();
   }
 
   public IActionResult Settings()

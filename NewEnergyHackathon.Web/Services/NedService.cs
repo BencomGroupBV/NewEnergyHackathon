@@ -10,15 +10,16 @@ public interface INedService
 
 public class NedService : INedService
 {
+  private readonly IConfiguration _configuration;
   private readonly HttpClient _httpClient;
   private const string BaseUrl = "https://api.ned.nl/v1/utilizations";
 
-  public NedService(HttpClient httpClient)
+  public NedService(HttpClient httpClient, IConfiguration configuration)
   {
     _httpClient = httpClient;
+    _configuration = configuration;
     _httpClient.DefaultRequestHeaders.Clear();
-    _httpClient.DefaultRequestHeaders.Add("X-AUTH-TOKEN",
-      "a1997970697c96b6513b010c15e586c769eb33d5281064c5bffb5c9c24d48464");
+    _httpClient.DefaultRequestHeaders.Add("X-AUTH-TOKEN", $"{_configuration["ApiKey"]}");
     _httpClient.DefaultRequestHeaders.Add("Accept", "application/ld+json");
   }
 
